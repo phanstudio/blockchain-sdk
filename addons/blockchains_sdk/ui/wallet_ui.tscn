@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://bupyab8mhkj4a"]
+
+[ext_resource type="Script" path="res://addons/blockchains_sdk/ui/wallet_ui.gd" id="1_5su6o"]
+
+[node name="walletUi" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_5su6o")
+
+[node name="MainColumn" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 221.0
+offset_bottom = 120.0
+
+[node name="StatusLabel" type="Label" parent="MainColumn"]
+layout_mode = 2
+text = "Status: Ready"
+
+[node name="WalletLabel" type="Label" parent="MainColumn"]
+layout_mode = 2
+text = "Wallet: Not Connected"
+
+[node name="ConnectWallet" type="Button" parent="MainColumn"]
+layout_mode = 2
+text = "Connect Wallet"
+
+[node name="AddressLabel" type="Label" parent="MainColumn"]
+visible = false
+layout_mode = 2
+text = "Address: "
+
+[node name="BalanceLabel" type="Label" parent="MainColumn"]
+visible = false
+layout_mode = 2
+text = "Balance: --"
+
+[node name="TransactionSection" type="VBoxContainer" parent="MainColumn"]
+visible = false
+layout_mode = 2
+
+[node name="TxLabel" type="Label" parent="MainColumn/TransactionSection"]
+layout_mode = 2
+text = "Txn: "
+
+[node name="AddressInput" type="LineEdit" parent="MainColumn/TransactionSection"]
+layout_mode = 2
+placeholder_text = "Enter address"
+
+[node name="AmountInput" type="LineEdit" parent="MainColumn/TransactionSection"]
+layout_mode = 2
+placeholder_text = "Enter amount"
+
+[node name="ControlRow" type="HBoxContainer" parent="MainColumn/TransactionSection"]
+layout_mode = 2
+
+[node name="SendButton" type="Button" parent="MainColumn/TransactionSection/ControlRow"]
+layout_mode = 2
+text = "SendButton"
+
+[node name="Blockchain" type="Node2D" parent="."]
