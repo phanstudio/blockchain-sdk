@@ -1,6 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-.export/
-.test/
-.gitignore
+export/
+test/
