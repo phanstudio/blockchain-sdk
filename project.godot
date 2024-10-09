@@ -25,7 +25,7 @@ version_control/plugin_name="blockchainsdk"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/blockchains_sdk/plugin.cfg")
+enabled=PackedStringArray()
 
 [rendering]
 
