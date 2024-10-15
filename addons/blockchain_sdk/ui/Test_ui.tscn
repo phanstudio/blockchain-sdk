@@ -1,13 +1,13 @@
 [gd_scene load_steps=2 format=3 uid="uid://bupyab8mhkj4a"]
 
-[ext_resource type="Script" path="res://addons/blockchains_sdk/ui/wallet_ui.gd" id="1_5su6o"]
+[ext_resource type="Script" path="res://addons/blockchain_sdk/ui/example_script.gd" id="1_weldk"]
 
 [node name="walletUi" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_5su6o")
+script = ExtResource("1_weldk")
 
 [node name="MainColumn" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -58,5 +58,3 @@ layout_mode = 2
 [node name="SendButton" type="Button" parent="MainColumn/TransactionSection/ControlRow"]
 layout_mode = 2
 text = "SendButton"
-
-[node name="Blockchain" type="Node2D" parent="."]

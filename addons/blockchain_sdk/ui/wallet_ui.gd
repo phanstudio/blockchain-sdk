@@ -1,6 +1,6 @@
 @tool
 extends Control
-class_name WalletUI
+#class_name WalletUI
 
 @onready var status_label = $MainColumn/StatusLabel
 @onready var balance_label = $MainColumn/BalanceLabel
