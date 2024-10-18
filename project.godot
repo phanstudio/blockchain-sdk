@@ -11,14 +11,18 @@ config_version=5
 [application]
 
 config/name="Blockchain SDK"
-run/main_scene="res://addons/blockchain_sdk/ui/Test_ui.tscn"
+run/main_scene="res://addons/blockchain_sdk/test/Test_ui.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://addons/blockchain_sdk/assets/resources/icon.svg"
 
 [autoload]
 
-BlockchainGlobal="*res://addons/blockchains_sdk/autoloads/blockchain_global.gd"
 Web3Global="*res://addons/blockchain_sdk/autoloads/web3_global.gd"
+
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [editor]
 

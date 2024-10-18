@@ -1,0 +1,42 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://biphspwt4t4ek"]
+
+[ext_resource type="FontVariation" uid="uid://d11pno2n63ten" path="res://addons/blockchain_sdk/assets/resources/defualtfont.tres" id="1_l8abj"]
+[ext_resource type="StyleBox" uid="uid://ca2xi4aayar7w" path="res://addons/blockchain_sdk/assets/resources/button_style.tres" id="3_1q1do"]
+[ext_resource type="Texture2D" uid="uid://c4u43awj31to3" path="res://addons/blockchain_sdk/assets/imgs/panel-border-008.png" id="4_1bifh"]
+[ext_resource type="Texture2D" uid="uid://du0qaea8kopod" path="res://addons/blockchain_sdk/assets/imgs/panel-transparent-center-008.png" id="5_pm2gp"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_almar"]
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bsnuu"]
+texture = ExtResource("4_1bifh")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+modulate_color = Color(0.703125, 0.703125, 0.703125, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s2kua"]
+texture = ExtResource("5_pm2gp")
+texture_margin_left = 24.0
+texture_margin_top = 12.0
+texture_margin_right = 24.0
+texture_margin_bottom = 12.0
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
+Button/font_sizes/font_size = 20
+Button/fonts/font = ExtResource("1_l8abj")
+Button/styles/focus = SubResource("StyleBoxTexture_almar")
+Button/styles/hover = ExtResource("3_1q1do")
+Button/styles/normal = SubResource("StyleBoxTexture_bsnuu")
+Button/styles/pressed = SubResource("StyleBoxTexture_s2kua")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/fonts/font = ExtResource("1_l8abj")

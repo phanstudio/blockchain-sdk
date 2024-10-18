@@ -117,3 +117,10 @@ func JsNew(new_obj, args):
 	window._new_value_args = null
 	window._new_value = null
 	return new_value
+
+func _on_reject(args):
+	var response = args[0] if args.size() > 0 else null
+	console.log(response)
+
+func new_obj():
+	return JavaScriptBridge.create_object('Object') 

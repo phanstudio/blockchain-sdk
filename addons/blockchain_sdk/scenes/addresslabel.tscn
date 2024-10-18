@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://brt5xsxbhhl0c"]
+
+[ext_resource type="Script" path="res://addons/blockchain_sdk/scenes/scripts/addresslabel.gd" id="1_raepr"]
+[ext_resource type="Texture2D" uid="uid://bk16y5lu3cejb" path="res://addons/blockchain_sdk/assets/imgs/panel-017.png" id="2_jppeu"]
+[ext_resource type="Theme" uid="uid://biphspwt4t4ek" path="res://addons/blockchain_sdk/assets/resources/defualt_theme.tres" id="3_qqw50"]
+
+[node name="AddressLabel" type="MarginContainer"]
+texture_filter = 6
+offset_right = 106.0
+offset_bottom = 48.0
+script = ExtResource("1_raepr")
+
+[node name="background" type="NinePatchRect" parent="."]
+self_modulate = Color(0.0742188, 0.0742188, 0.0742188, 1)
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("2_jppeu")
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+metadata/_edit_lock_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+theme = ExtResource("3_qqw50")
+vertical_alignment = 1

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhaf47riq2t3n"]
+
+[ext_resource type="Script" path="res://addons/blockchain_sdk/scenes/scripts/display.gd" id="1_yg6eu"]
+[ext_resource type="PackedScene" uid="uid://brt5xsxbhhl0c" path="res://addons/blockchain_sdk/scenes/addresslabel.tscn" id="2_wt48m"]
+
+[node name="Display" type="MarginContainer"]
+texture_filter = 4
+custom_minimum_size = Vector2(40, 40)
+offset_right = 272.0
+offset_bottom = 48.0
+script = ExtResource("1_yg6eu")
+addresstext = "address"
+amounttext = "amount"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AddressLabel" parent="VBoxContainer" instance=ExtResource("2_wt48m")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "address"
+
+[node name="AmountLabel" parent="VBoxContainer" instance=ExtResource("2_wt48m")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "amount"
