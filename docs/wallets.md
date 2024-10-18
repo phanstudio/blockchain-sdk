@@ -1,5 +1,3 @@
-Certainly! Here's the documentation for the `Wallet` class:
-
 # Wallet
 
 `Wallet` is a class that extends `JsWeb3Node` and provides functionality for managing cryptocurrency wallet connections, network switching, and balance retrieval in a Godot project.
