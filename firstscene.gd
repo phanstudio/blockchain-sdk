@@ -8,7 +8,19 @@ func onclick():
 	var address = precompiled_contract.ADDRESS_PRECOMPILE_ADDRESS
 	var abi = precompiled_contract.ADDRESS_PRECOMPILE_ABI
 	var contract = contract_manager.smartcontract(address, abi)
-	await contract_manager.run(
+	var logs = await contract_manager.runsafely(
 		contract.getSeiAddr,
-		contract_manager.arr_to_str(["0xa604362acaAe026a0D326DFaeD506186D1C145C8"]),
+		["0xa604362acaAe026a0D326DFaeD506186D1C145C8"],
 	)
+	if logs:
+		contract_manager.console.log(logs)
+	else:
+		pass
+	logs = await contract_manager.runsafely(
+		contract.getEvmAddr,
+		["sei1zjxfju4vjwu3gx5famk57njx52wtc056se6xsh"],
+	)
+	if logs:
+		contract_manager.console.log(logs)
+	else:
+		pass

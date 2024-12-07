@@ -54,10 +54,27 @@ func _query_contract(args):
 	#var string = ", ".join(string_array)
 	#return string
 
+#func str_to_address(lstring):
+	#return "(address)"+lstring
+
 func arr_to_str(arr:Array):
-	var string_array = PackedStringArray(arr)
-	var string = ", ".join(string_array)
-	return string
+	var s = ""
+	for value in arr:
+		match typeof(value):
+			TYPE_STRING:
+				if value.replace("n", "").is_valid_int(): # big number
+					s += ('%s, '%[value])
+				#elif value.begins_with("(address)"): # big number
+					#s += ('"%s", '%[value]).replace("(address)", "")
+				else:
+					s += ('"%s", '%[value]) # might change
+			TYPE_NIL:
+				s += ('%s, '%[value]).replace("<null>", "null")
+			_:
+				s += (' %s, '%[value])
+		
+	s = s.substr(0, s.length()-2)
+	return s
 
 func create_big_obj(dicts: Dictionary):
 	var s = "{ "
@@ -187,7 +204,6 @@ func run(_method, args: String, _type: String= "query"): # add contract executed
 		}
 	window.result = run_contract
 	"""%[args]
-	print(javascript_code)
 	JavaScriptBridge.eval(javascript_code);
 	var execute = query_contract
 	if _type == "execute":

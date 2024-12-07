@@ -139,7 +139,6 @@ func get_balance() -> void:
 	})();
 	""" % [params]
 	JavaScriptBridge.eval(javascript_code)
-	print(9)
 
 ### Get responses from operations
 func _on_confirm(args: Array) -> void:
