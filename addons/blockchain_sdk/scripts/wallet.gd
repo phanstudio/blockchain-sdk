@@ -34,7 +34,6 @@ func _ready():
 	if OS.has_feature("web"):
 		window._confirm_function = _confirm_function
 
-
 ## Conect to the account (Operation)
 func connect_wallet() -> void:
 	if is_connecting:

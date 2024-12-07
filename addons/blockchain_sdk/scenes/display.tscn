@@ -9,8 +9,6 @@ custom_minimum_size = Vector2(40, 40)
 offset_right = 272.0
 offset_bottom = 48.0
 script = ExtResource("1_yg6eu")
-addresstext = "address"
-amounttext = "amount"
 
 [node name="VBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -20,10 +18,8 @@ theme_override_constants/separation = 10
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-text = "address"
 
 [node name="AmountLabel" parent="VBoxContainer" instance=ExtResource("2_wt48m")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-text = "amount"

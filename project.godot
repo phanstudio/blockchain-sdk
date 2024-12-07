@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Blockchain SDK"
-run/main_scene="res://addons/blockchain_sdk/test/Test_ui.tscn"
+run/main_scene="res://firstscene.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://addons/blockchain_sdk/assets/resources/icon.svg"
 
