@@ -1,19 +1,130 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7uqdpyxfg5ha"]
+[gd_scene load_steps=5 format=3 uid="uid://b7uqdpyxfg5ha"]
 
 [ext_resource type="PackedScene" uid="uid://bn4fobx4dd8fc" path="res://addons/blockchain_sdk/scenes/interface.tscn" id="1_8rnnk"]
 [ext_resource type="Script" path="res://firstscene.gd" id="1_tu30x"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5ppe"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04r03"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_tu30x")
 
-[node name="Interface" parent="." instance=ExtResource("1_8rnnk")]
-
 [node name="Button" type="Button" parent="."]
+visible = false
 offset_left = 195.0
 offset_top = 13.0
 offset_right = 372.0
 offset_bottom = 44.0
 text = "hi
 "
+
+[node name="wallet_Interface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1154.0
+offset_bottom = 645.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Interface" parent="wallet_Interface" instance=ExtResource("1_8rnnk")]
+layout_mode = 0
+
+[node name="ConnectedSection" type="PanelContainer" parent="wallet_Interface"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -199.5
+offset_right = 185.0
+offset_bottom = 199.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v5ppe")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="wallet_Interface/ConnectedSection"]
+layout_mode = 2
+
+[node name="connect_wallet" type="PanelContainer" parent="wallet_Interface"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -199.5
+offset_right = 185.0
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_04r03")
+
+[node name="MainBody" type="HBoxContainer" parent="wallet_Interface/connect_wallet"]
+layout_mode = 2
+
+[node name="WalletSection" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="wallet_Interface/connect_wallet/MainBody/WalletSection"]
+layout_mode = 2
+text = "Connect a wallet"
+
+[node name="wallets" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody/WalletSection"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/MainBody/WalletSection/wallets"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0.345098, 1)
+theme_override_font_sizes/font_size = 10
+text = "Installed"
+
+[node name="Button" type="Button" parent="wallet_Interface/connect_wallet/MainBody/WalletSection/wallets"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Metamask"
+
+[node name="VSeparator" type="VSeparator" parent="wallet_Interface/connect_wallet/MainBody"]
+layout_mode = 2
+
+[node name="extra text" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/MainBody/extra text"]
+layout_mode = 2
+text = "What is a wallet?"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="wallet_Interface/connect_wallet/MainBody/extra text"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Software Wallets: Apps or browser extensions that manage private keys and interact with the blockchain, available for desktop and mobile."
+horizontal_alignment = 1
+autowrap_mode = 2
 
 [connection signal="pressed" from="Button" to="." method="onclick"]
