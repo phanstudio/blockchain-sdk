@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7uqdpyxfg5ha"]
+[gd_scene load_steps=7 format=3 uid="uid://b7uqdpyxfg5ha"]
 
 [ext_resource type="PackedScene" uid="uid://bn4fobx4dd8fc" path="res://addons/blockchain_sdk/scenes/interface.tscn" id="1_8rnnk"]
 [ext_resource type="Script" path="res://firstscene.gd" id="1_tu30x"]
@@ -8,10 +8,38 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
+bg_color = Color(0.0509804, 0.0784314, 0.227451, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.141176, 0.211765, 0.427451, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wq6j"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.141176, 0.211765, 0.427451, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnbxb"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.211765, 0.321569, 0.909804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04r03"]
 content_margin_left = 10.0
@@ -44,9 +72,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Interface" parent="wallet_Interface" instance=ExtResource("1_8rnnk")]
+visible = false
 layout_mode = 0
 
 [node name="ConnectedSection" type="PanelContainer" parent="wallet_Interface"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -61,8 +91,87 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_v5ppe")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="wallet_Interface/ConnectedSection"]
+[node name="Body" type="VBoxContainer" parent="wallet_Interface/ConnectedSection"]
 layout_mode = 2
+
+[node name="TittleSection" type="HBoxContainer" parent="wallet_Interface/ConnectedSection/Body"]
+layout_mode = 2
+
+[node name="Tittle" type="Label" parent="wallet_Interface/ConnectedSection/Body/TittleSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Connected Address"
+
+[node name="CloseButton" type="Button" parent="wallet_Interface/ConnectedSection/Body/TittleSection"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "X"
+flat = true
+
+[node name="AddressContainer" type="PanelContainer" parent="wallet_Interface/ConnectedSection/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7wq6j")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="wallet_Interface/ConnectedSection/Body/AddressContainer"]
+layout_mode = 2
+
+[node name="AddressLabel" type="Label" parent="wallet_Interface/ConnectedSection/Body/AddressContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0xD4CE...B827"
+
+[node name="DisconnectButton2" type="Button" parent="wallet_Interface/ConnectedSection/Body/AddressContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Copy Address"
+
+[node name="AmountLabel" type="Label" parent="wallet_Interface/ConnectedSection/Body"]
+layout_mode = 2
+text = "8.94 sei"
+
+[node name="DisconnectButton" type="Button" parent="wallet_Interface/ConnectedSection/Body"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "Disconnect"
+
+[node name="mainconnectbutton" type="Control" parent="wallet_Interface"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Connect" type="Button" parent="wallet_Interface/mainconnectbutton"]
+visible = false
+layout_mode = 2
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 135.0
+offset_bottom = 48.0
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "Connect
+"
+
+[node name="AddressButton" type="PanelContainer" parent="wallet_Interface/mainconnectbutton"]
+layout_mode = 2
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 202.0
+offset_bottom = 53.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7wq6j")
+
+[node name="ConnectedRow" type="HBoxContainer" parent="wallet_Interface/mainconnectbutton/AddressButton"]
+layout_mode = 2
+
+[node name="AmountLabel" type="Label" parent="wallet_Interface/mainconnectbutton/AddressButton/ConnectedRow"]
+layout_mode = 2
+text = "8.94 sei"
+
+[node name="DisconnectButton" type="Button" parent="wallet_Interface/mainconnectbutton/AddressButton/ConnectedRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "0xD4CE...B827"
 
 [node name="connect_wallet" type="PanelContainer" parent="wallet_Interface"]
 visible = false
@@ -80,46 +189,46 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_04r03")
 
-[node name="MainBody" type="HBoxContainer" parent="wallet_Interface/connect_wallet"]
+[node name="Body" type="HBoxContainer" parent="wallet_Interface/connect_wallet"]
 layout_mode = 2
 
-[node name="WalletSection" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody"]
+[node name="WalletSection" type="VBoxContainer" parent="wallet_Interface/connect_wallet/Body"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="wallet_Interface/connect_wallet/MainBody/WalletSection"]
+[node name="Label" type="Label" parent="wallet_Interface/connect_wallet/Body/WalletSection"]
 layout_mode = 2
 text = "Connect a wallet"
 
-[node name="wallets" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody/WalletSection"]
+[node name="wallets" type="VBoxContainer" parent="wallet_Interface/connect_wallet/Body/WalletSection"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/MainBody/WalletSection/wallets"]
+[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/Body/WalletSection/wallets"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0.345098, 1)
 theme_override_font_sizes/font_size = 10
 text = "Installed"
 
-[node name="Button" type="Button" parent="wallet_Interface/connect_wallet/MainBody/WalletSection/wallets"]
+[node name="Button" type="Button" parent="wallet_Interface/connect_wallet/Body/WalletSection/wallets"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Metamask"
 
-[node name="VSeparator" type="VSeparator" parent="wallet_Interface/connect_wallet/MainBody"]
+[node name="VSeparator" type="VSeparator" parent="wallet_Interface/connect_wallet/Body"]
 layout_mode = 2
 
-[node name="extra text" type="VBoxContainer" parent="wallet_Interface/connect_wallet/MainBody"]
+[node name="extra text" type="VBoxContainer" parent="wallet_Interface/connect_wallet/Body"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 20
 
-[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/MainBody/extra text"]
+[node name="Label2" type="Label" parent="wallet_Interface/connect_wallet/Body/extra text"]
 layout_mode = 2
 text = "What is a wallet?"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="wallet_Interface/connect_wallet/MainBody/extra text"]
+[node name="Label3" type="Label" parent="wallet_Interface/connect_wallet/Body/extra text"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
