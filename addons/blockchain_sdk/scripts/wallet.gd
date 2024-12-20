@@ -181,3 +181,15 @@ func _signer_initialized(args):
 	var response = args[0] if args.size() > 0 else null
 	signer = response
 	window.signer = signer
+
+func shorten_hex(hex_string: String, header: String = "0x") -> String:
+	# Ensure the string is in uppercase and starts with "0x"
+	hex_string = hex_string.strip_edges()#.to_upper()
+	if not hex_string.begins_with(header):
+		hex_string = header + hex_string
+	# Shorten the string to the first 4 and last 4 characters
+	if len(hex_string) > 10:  # At least "0x" + 8 characters
+		return "%s%s...%s"%[hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4)]
+		#return "{}{}...{}".format(hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4))
+	else:
+		return hex_string

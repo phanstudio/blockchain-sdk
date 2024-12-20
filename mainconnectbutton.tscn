@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3 uid="uid://db4wvgualh8ts"]
+
+[ext_resource type="Script" path="res://mainconnectbutton.gd" id="1_0fbgc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnbxb"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.211765, 0.321569, 0.909804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wq6j"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.141176, 0.211765, 0.427451, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="mainconnectbutton" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_0fbgc")
+
+[node name="Connect" type="Button" parent="."]
+layout_mode = 2
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 135.0
+offset_bottom = 48.0
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "Connect
+"
+
+[node name="Connected" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 202.0
+offset_bottom = 53.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7wq6j")
+
+[node name="ConnectedRow" type="HBoxContainer" parent="Connected"]
+layout_mode = 2
+
+[node name="AmountLabel" type="Label" parent="Connected/ConnectedRow"]
+layout_mode = 2
+text = "0 sei"
+
+[node name="DisconnectButton" type="Button" parent="Connected/ConnectedRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "0X89BH...JBHB"
+
+[connection signal="pressed" from="Connect" to="." method="button_clicked"]
+[connection signal="pressed" from="Connected/ConnectedRow/DisconnectButton" to="." method="button_clicked"]

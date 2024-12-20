@@ -1,0 +1,209 @@
+[gd_scene load_steps=9 format=3 uid="uid://stw5o24tuait"]
+
+[ext_resource type="Script" path="res://wallet_interface.gd" id="1_ojqeb"]
+[ext_resource type="PackedScene" uid="uid://bn4fobx4dd8fc" path="res://addons/blockchain_sdk/scenes/interface.tscn" id="2_b6tw2"]
+[ext_resource type="PackedScene" uid="uid://db4wvgualh8ts" path="res://mainconnectbutton.tscn" id="3_tt3h4"]
+[ext_resource type="Script" path="res://connected_section.gd" id="4_kbhq7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5ppe"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.0509804, 0.0784314, 0.227451, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.141176, 0.211765, 0.427451, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wq6j"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.141176, 0.211765, 0.427451, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnbxb"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.211765, 0.321569, 0.909804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04r03"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="wallet_Interface" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 6.0
+offset_right = 1160.0
+offset_bottom = 645.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ojqeb")
+
+[node name="Interface" parent="." instance=ExtResource("2_b6tw2")]
+visible = false
+layout_mode = 0
+
+[node name="mainconnectbutton" parent="." instance=ExtResource("3_tt3h4")]
+
+[node name="ConnectedSection" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -199.5
+offset_right = 185.0
+offset_bottom = 199.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v5ppe")
+script = ExtResource("4_kbhq7")
+
+[node name="Body" type="VBoxContainer" parent="ConnectedSection"]
+layout_mode = 2
+
+[node name="TittleSection" type="HBoxContainer" parent="ConnectedSection/Body"]
+layout_mode = 2
+
+[node name="Tittle" type="Label" parent="ConnectedSection/Body/TittleSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Connected Address"
+
+[node name="CloseButton" type="Button" parent="ConnectedSection/Body/TittleSection"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "X"
+flat = true
+
+[node name="AddressContainer" type="PanelContainer" parent="ConnectedSection/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7wq6j")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConnectedSection/Body/AddressContainer"]
+layout_mode = 2
+
+[node name="AddressLabel" type="Label" parent="ConnectedSection/Body/AddressContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0xD4CE...B827"
+
+[node name="DisconnectButton2" type="Button" parent="ConnectedSection/Body/AddressContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Copy Address"
+
+[node name="AmountLabel" type="Label" parent="ConnectedSection/Body"]
+layout_mode = 2
+text = "8.94 sei"
+
+[node name="DisconnectButton" type="Button" parent="ConnectedSection/Body"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_pnbxb")
+text = "Disconnect"
+
+[node name="connect_wallet" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -199.5
+offset_right = 185.0
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_04r03")
+
+[node name="Body" type="HBoxContainer" parent="connect_wallet"]
+layout_mode = 2
+
+[node name="WalletSection" type="VBoxContainer" parent="connect_wallet/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="connect_wallet/Body/WalletSection"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="connect_wallet/Body/WalletSection/HBoxContainer"]
+layout_mode = 2
+text = "Connect a wallet"
+
+[node name="CloseButton" type="Button" parent="connect_wallet/Body/WalletSection/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "X"
+flat = true
+
+[node name="wallets" type="VBoxContainer" parent="connect_wallet/Body/WalletSection"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="connect_wallet/Body/WalletSection/wallets"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0.345098, 1)
+theme_override_font_sizes/font_size = 10
+text = "Installed"
+
+[node name="Button" type="Button" parent="connect_wallet/Body/WalletSection/wallets"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Metamask"
+
+[node name="VSeparator" type="VSeparator" parent="connect_wallet/Body"]
+layout_mode = 2
+
+[node name="extra text" type="VBoxContainer" parent="connect_wallet/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="Label2" type="Label" parent="connect_wallet/Body/extra text"]
+layout_mode = 2
+text = "What is a wallet?"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="connect_wallet/Body/extra text"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Software Wallets: Apps or browser extensions that manage private keys and interact with the blockchain, available for desktop and mobile."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="ConnectedSection/Body/TittleSection/CloseButton" to="." method="close_connect_section"]
+[connection signal="pressed" from="ConnectedSection/Body/TittleSection/CloseButton" to="ConnectedSection" method="close_self"]
+[connection signal="pressed" from="ConnectedSection/Body/DisconnectButton" to="." method="_connect_wallet"]
+[connection signal="pressed" from="connect_wallet/Body/WalletSection/HBoxContainer/CloseButton" to="." method="close_connect_section"]
+[connection signal="pressed" from="connect_wallet/Body/WalletSection/wallets/Button" to="." method="_connect_wallet"]
