@@ -10,7 +10,6 @@ signal balance_updated(balance: String)
 
 var wallet_address: String = ""
 var is_wallet_connected: bool = false
-var is_connecting = false
 var accounts = []
 
 const SUPPORTED_CHAINS = {
@@ -36,13 +35,13 @@ func _ready():
 
 ## Conect to the account (Operation)
 func connect_wallet() -> void:
-	if is_connecting:
+	if is_wallet_connected:
 		print("Already connecting to wallet. Please wait.")
 		return
 	if not OS.has_feature("web"):
 		emit_signal("wallet_error", "Wallet connection only available in web builds")
 		return
-	is_connecting = true
+	is_wallet_connected = true
 	reconnect()
 	
 	# create a wait for function for cotracts that need to use them
@@ -64,12 +63,12 @@ func _on_reconnect(args):
 	wait_till(window.ethereum.request(object).then(_connects).catch(on_reject))
 	switch_network("Sei-devnet")
 	provider.getSigner().then(signer_initialized)
-	is_connecting = false
+	is_wallet_connected = false
 
 func _on_reconnect_error(args):
 	var response = args[0] if args.size() > 0 else null
 	#console.log(response)
-	is_connecting = false
+	is_wallet_connected = false
 
 func _connect(args):
 	var response = args[0] if args.size() > 0 else null

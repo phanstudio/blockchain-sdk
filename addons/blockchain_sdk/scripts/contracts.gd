@@ -5,20 +5,21 @@ signal contract_created(address: String)
 signal contract_query_result(result)
 signal contract_execution_result(result)
 
+var checklogs
+var safereject
+var jsreturnvalue
+
 var query_contract = JavaScriptBridge.create_callback(_query_contract)
 var execute_contract = JavaScriptBridge.create_callback(_execute_contract)
 var wait = JavaScriptBridge.create_callback(_wait)
 var sign_returned = JavaScriptBridge.create_callback(_sign_returned)
 var sign_error = JavaScriptBridge.create_callback(_sign_error)
-var checklogs
-var safereject
-var jsreturnvalue
+
 var safeerror = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
 		safereject = response
 )
-
 var jsreturn = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
@@ -131,7 +132,7 @@ func create_jsobj(dicts: Dictionary):
 	delete_globals("result")
 	return result
 
-func runsafely(contractmethod, args1:Array, _method:String= "query"): # execute or query
+func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
 	var args:String = arr_to_str(args1)
 	window.contractmethod = contractmethod.estimateGas
 	var argument_dict = read_big_obj(args.split(", ")[-1])
@@ -180,7 +181,6 @@ func runsafely(contractmethod, args1:Array, _method:String= "query"): # execute 
 		delete_globals("result")
 		runlogs = jsreturnvalue
 		console.log(runlogs)
-		print(9)
 	else:
 		runlogs = error
 	jsreturnvalue = null

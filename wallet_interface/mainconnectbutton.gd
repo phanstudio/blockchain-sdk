@@ -38,7 +38,6 @@ var connected: bool = false:
 	get:
 		return connected
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	connected = wallet_manager.is_wallet_connected
 

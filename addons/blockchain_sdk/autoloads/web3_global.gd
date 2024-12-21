@@ -7,6 +7,10 @@ extends Node
 var wallet_manager: Wallet
 var contract_manager: ContractManager
 
+#var wallet_address: String = "" # make global
+#var is_wallet_connected: bool = false
+#var accounts = []
+
 func _ready():
 	wallet_manager = Wallet.new()
 	contract_manager = ContractManager.new()

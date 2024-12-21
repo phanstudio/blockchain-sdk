@@ -26,8 +26,7 @@ func _connect_wallet() -> void:
 	else:
 		wallet.connect_wallet()
 
-func _on_wallet_connected(address: String) -> void:
-	address = address
+func _on_wallet_connected(_address: String) -> void:
 	_update_wallet_ui(true)
 
 func _on_wallet_disconnected() -> void:
@@ -45,6 +44,7 @@ func _update_wallet_ui(connected: bool) -> void:
 	connected_section.address = address
 
 func open_connect_section() -> void:
+	close_connect_section()
 	if wallet.is_wallet_connected:
 		connected_section.show()
 	else:
