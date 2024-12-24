@@ -43,6 +43,7 @@ func smartcontract(contract_address, contract_abi):
 	JavaScriptBridge.eval(javascript_code)
 	contract = window.contract
 	console.log(contract)
+	delete_globals("contract")
 	return contract
 
 # view/read contract (response)
@@ -185,8 +186,8 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 		runlogs = error
 	jsreturnvalue = null
 	safereject = null
-	if runlogs.willFail:
-		return runlogs
+	if runlogs.willFail: # add return values for success
+		return runlogs # create a dict error == false if its good
 	else:
 		await run(contractmethod, args, _method)
 		return safereject

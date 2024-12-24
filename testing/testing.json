@@ -1,0 +1,51 @@
+{
+	"name": "coin_flip",
+	"address": "0xb33a6b046c5152737ed46ae2c14bb04de497bd28",
+	"Abi": [
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "_coinFlipAddr",
+			  "type": "address"
+			}
+		  ],
+		  "name": "coinFlipGuess",
+		  "outputs": [
+			{
+			  "internalType": "uint256",
+			  "name": "",
+			  "type": "uint256"
+			}
+		  ],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [],
+		  "name": "consecutiveWins",
+		  "outputs": [
+			{
+			  "internalType": "uint256",
+			  "name": "",
+			  "type": "uint256"
+			}
+		  ],
+		  "stateMutability": "view",
+		  "type": "function"
+		},
+		{
+		  "inputs": [],
+		  "name": "FACTOR",
+		  "outputs": [
+			{
+			  "internalType": "uint256",
+			  "name": "",
+			  "type": "uint256"
+			}
+		  ],
+		  "stateMutability": "view",
+		  "type": "function"
+		}
+	]
+}

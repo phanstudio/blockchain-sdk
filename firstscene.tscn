@@ -10,10 +10,18 @@ script = ExtResource("1_tu30x")
 [node name="wallet_Interface" parent="." instance=ExtResource("2_3qj7v")]
 
 [node name="Button" type="Button" parent="."]
-offset_left = 195.0
-offset_top = 13.0
-offset_right = 372.0
-offset_bottom = 44.0
+offset_left = 284.0
+offset_top = 202.0
+offset_right = 461.0
+offset_bottom = 233.0
+text = "hi
+"
+
+[node name="Button2" type="Button" parent="."]
+offset_left = 285.0
+offset_top = 244.0
+offset_right = 462.0
+offset_bottom = 275.0
 text = "hi
 "
 
@@ -25,3 +33,4 @@ offset_right = 151.0
 offset_bottom = 140.0
 
 [connection signal="pressed" from="Button" to="." method="onclick"]
+[connection signal="pressed" from="Button2" to="." method="onclickget"]

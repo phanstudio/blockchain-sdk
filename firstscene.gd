@@ -24,20 +24,11 @@ extends Node2D
 		##contract_manager.console.log(logs)
 	##else:
 		##pass
-		
-
-var contract_manager : ContractManager
-const DragonswapRouter = preload("res://testing/DragonswapRouter.gd")
 
 func onclick():
-	contract_manager = Web3Global.contract_manager
-	var address = DragonswapRouter.DRAGONSWAPROUTER_ADDRESS
-	var abi = DragonswapRouter.DRAGONSWAPROUTER_ABI
-	var contract = contract_manager.smartcontract(address, abi)
-	var logs = await contract_manager.runsafely(
-		contract.WSEI,
-	)
-	if logs:
-		contract_manager.console.log(logs)
-	else: # handel error
-		pass
+	#var contract = DragonSwapRouterContract.new()
+	#var logs = await contract.WSEI()
+	#print(logs)
+	var contract = PrecompliedAddressContract.new()
+	var logs = await contract.getSeiAddr("0xa604362acaae026a0d326dfaed506186d1c145c8")
+	print(logs)

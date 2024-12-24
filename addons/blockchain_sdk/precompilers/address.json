@@ -1,11 +1,7 @@
-extends Node
-
-const ADDRESS_PRECOMPILE_ADDRESS = '0x0000000000000000000000000000000000001004';
-
-# The ABI for the Address precompile contract in GDScript (as a dictionary).
-# @category Cosmos Interoperability
-
-const ADDRESS_PRECOMPILE_ABI = [
+{
+	"name": "precomplied_address",
+	"address": "0x0000000000000000000000000000000000001004",
+	"Abi": [
 	{
 		"inputs": [{"internalType": "string", "name": "addr", "type": "string"}],
 		"name": "getEvmAddr",
@@ -46,3 +42,4 @@ const ADDRESS_PRECOMPILE_ABI = [
 		"type": "function"
 	}
 ]
+}

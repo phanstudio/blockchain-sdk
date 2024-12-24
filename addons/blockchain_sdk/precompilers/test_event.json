@@ -1,0 +1,38 @@
+{
+	"name": "test_event",
+	"address": "0x65ee8bdf7cd4d3e124fc462d52e746db67f14c9c",
+	"Abi": [
+	{
+		"inputs": [],
+		"name": "createPhase",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "phaseId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "totalPrize",
+				"type": "uint256"
+			}
+		],
+		"name": "PhaseCreated",
+		"type": "event"
+	}
+]
+}
