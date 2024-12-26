@@ -33,7 +33,7 @@ func _on_wallet_disconnected() -> void:
 	_update_wallet_ui(false)
 
 func _update_balance(balance: String) -> void:
-	amount = int(balance)
+	amount = float(balance)
 	mainconnectbutton.amount = amount
 	connected_section.amount = amount
 

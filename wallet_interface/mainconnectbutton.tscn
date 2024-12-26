@@ -43,7 +43,6 @@ text = "Connect
 "
 
 [node name="Connected" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 2
 offset_left = 10.0
 offset_top = 10.0

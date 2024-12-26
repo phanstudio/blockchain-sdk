@@ -5,7 +5,7 @@ extends PanelContainer
 @onready var wallet_manager: Wallet = Web3Global.wallet_manager
 #signal onclick()
 
-var amount: int = 0:
+var amount: float = 0.0:
 	set(new_value):
 		if new_value < 0:
 			new_value = 0

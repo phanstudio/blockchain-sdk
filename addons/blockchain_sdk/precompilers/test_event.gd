@@ -39,15 +39,15 @@ func _init() -> void:
 		"name": "PhaseCreated",
 		"type": "event"
 	}
-]
+	]
 	contract = contract_manager.smartcontract(address, abi)
 
-func createPhase() -> Variant:
+func createPhase() -> void:
 	var logs = await contract_manager.runsafely(
-		contract.createPhase,
+		contract.createPhase,[],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling createPhase")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	

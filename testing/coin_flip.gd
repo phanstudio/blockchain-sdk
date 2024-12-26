@@ -52,36 +52,36 @@ func _init() -> void:
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+	]
 	contract = contract_manager.smartcontract(address, abi)
 
-func coinFlipGuess(_coinFlipAddr: String) -> int:
+func coinFlipGuess(_coinFlipAddr: String) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.coinFlipGuess,
-		[_coinFlipAddr]
+		[_coinFlipAddr],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling coinFlipGuess")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
 func consecutiveWins() -> int:
 	var logs = await contract_manager.runsafely(
-		contract.consecutiveWins,
+		contract.consecutiveWins,[],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling consecutiveWins")
-	return 0
+	contract_manager.console.log(logs.toString())
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
 func FACTOR() -> int:
 	var logs = await contract_manager.runsafely(
-		contract.FACTOR,
+		contract.FACTOR,[],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling FACTOR")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs

@@ -1,12 +1,10 @@
 extends JsWeb3Node
 class_name ContractManager
 
-signal contract_created(address: String)
 signal contract_query_result(result)
 signal contract_execution_result(result)
 
 var checklogs
-var safereject
 var jsreturnvalue
 
 var query_contract = JavaScriptBridge.create_callback(_query_contract)
@@ -14,11 +12,19 @@ var execute_contract = JavaScriptBridge.create_callback(_execute_contract)
 var wait = JavaScriptBridge.create_callback(_wait)
 var sign_returned = JavaScriptBridge.create_callback(_sign_returned)
 var sign_error = JavaScriptBridge.create_callback(_sign_error)
+const ERROR = "error;"
+const OKS = "ok;"
+var wait_check = false
+
+var output_logs = {
+	"error": null,
+	"output": null
+}
 
 var safeerror = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
-		safereject = response
+		updateoutput(response)
 )
 var jsreturn = JavaScriptBridge.create_callback(
 	func(args):
@@ -46,116 +52,12 @@ func smartcontract(contract_address, contract_abi):
 	delete_globals("contract")
 	return contract
 
-# view/read contract (response)
-func _query_contract(args):
-	var response = args[0] if args.size() > 0 else null
-	window.console.log(response)
-
-#func arr_to_str(arr:Array):
-	#var string_array = PackedStringArray(arr)
-	#var string = ", ".join(string_array)
-	#return string
-
-#func str_to_address(lstring):
-	#return "(address)"+lstring
-
-func arr_to_str(arr:Array):
-	var s = ""
-	for value in arr:
-		match typeof(value):
-			TYPE_STRING:
-				if value.replace("n", "").is_valid_int(): # big number
-					s += ('%s, '%[value])
-				#elif value.begins_with("(address)"): # big number
-					#s += ('"%s", '%[value]).replace("(address)", "")
-				else:
-					s += ('"%s", '%[value]) # might change
-			TYPE_NIL:
-				s += ('%s, '%[value]).replace("<null>", "null")
-			_:
-				s += (' %s, '%[value])
-		
-	s = s.substr(0, s.length()-2)
-	return s
-
-func create_big_obj(dicts: Dictionary):
-	var s = "{ "
-	for i in dicts.keys():
-		var value = dicts[i]
-		match typeof(value):
-			TYPE_STRING:
-				if value.replace("n", "").is_valid_int(): # big number
-					s += ('%s : %s, '%[i, value])
-				else:
-					s += ('%s : "%s", '%[i, value])
-			TYPE_NIL:
-				s += ('%s : %s, '%[i, value]).replace("<null>", "null")
-			_:
-				s += ('%s : %s, '%[i, value])
-		
-	s = s.substr(0, s.length()-2)
-	s += " }"
-	return s
-
-func read_big_obj(s: String) -> Dictionary:
-	s = s.strip_edges().trim_prefix("{").trim_suffix("}")
-	var result = {}
-	# Split into key-value pairs
-	var pairs = s.split(",")
-	for pair in pairs:
-		if ":" in pair:
-			var kv = pair.split(":")
-			var key = kv[0].strip_edges()
-			var value = kv[1].strip_edges()
-		# Try to convert value to number if possible
-			if value.is_valid_int():
-				value = value.to_int()
-			elif value.is_valid_float():
-				value = value.to_float()
-			elif value == "true":
-				value = true
-			elif value == "false":
-				value = false
-			elif value == "null":
-				value = null
-			elif "\"" in value:
-				value.replace("\"", "")
-			result[key] = value
-	return result
-
-func create_jsobj(dicts: Dictionary):
-	var s = create_big_obj(dicts)
-	var javascript_code = """
-	window.result = %s
-	"""%[s]
-	JavaScriptBridge.eval(javascript_code)
-	var result = window.result
-	delete_globals("result")
-	return result
-
+## The run methods
 func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
+	var runlogs
 	var args:String = arr_to_str(args1)
 	window.contractmethod = contractmethod.estimateGas
-	var argument_dict = read_big_obj(args.split(", ")[-1])
-	var error = {}
-	var runlogs
-	error["willFail"] = true
-	error["gasEstimate"] = null
-	if not Web3Global.wallet_manager.is_wallet_connected:
-		error["error"] = "wallet not connected"
-	elif "value" in argument_dict:
-		var bet_amount = parseBigNumToNumber(argument_dict["value"])
-		if bet_amount > Web3Global.wallet_manager.wallet_balance:
-			if 0 == Web3Global.wallet_manager.wallet_balance:
-				error["error"] = "amount in wallet is 0"
-			else:
-				error["error"] = "bet amount is greater than amount in wallet"
-		else:
-			error = false
-	else:
-		error = false
-	if error:
-		error = create_jsobj(error)
+	var error = handelDefualtErrors(args)
 	if not error:
 		var javascript_code = """
 			async function checkWillFailAsync() {
@@ -181,16 +83,17 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 		delete_globals("contractmethod")
 		delete_globals("result")
 		runlogs = jsreturnvalue
-		console.log(runlogs)
+		jsreturnvalue = null
 	else:
-		runlogs = error
-	jsreturnvalue = null
-	safereject = null
-	if runlogs.willFail: # add return values for success
-		return runlogs # create a dict error == false if its good
-	else:
+		runlogs = create_jsobj(error)
+	if not runlogs.willFail: # add return values for success
 		await run(contractmethod, args, _method)
-		return safereject
+		if output_logs["error"] == null:
+			return output_logs["output"]
+		printerr("Error: "+ output_logs["error"])
+		return ERROR
+	printerr("Error: "+ runlogs.error)
+	return ERROR
 
 func run(_method, args: String, _type: String= "query"): # add contract executed
 	window.contractmethod = _method
@@ -206,12 +109,59 @@ func run(_method, args: String, _type: String= "query"): # add contract executed
 	window.result = run_contract
 	"""%[args]
 	JavaScriptBridge.eval(javascript_code);
-	var execute = query_contract
+	#var execute = query_contract
 	if _type == "execute":
-		execute = execute_contract
-	await wait_till(window.result().then(execute).catch(safeerror)) # add retrive logs option
+		#execute = execute_contract
+		await finishTranscation(window.result().then(execute_contract).catch(safeerror))
+	else:
+		await wait_till(window.result().then(query_contract).catch(safeerror))
+	#await wait_till(window.result().then(execute).catch(safeerror)) # add retrive logs option
 	delete_globals("contractmethod")
 	delete_globals("result")
+	print(7)
+
+func updateoutput(_error=null, _output=null):
+	output_logs["error"] = _error
+	output_logs["output"] = _output
+
+func handelDefualtErrors(args: String):
+	var argument_dict = read_big_obj(args.split(", ")[-1])
+	var error = {
+		"willFail": true,
+		"gasEstimate": null,
+	}
+	if not Web3Global.wallet_manager.is_wallet_connected:
+		error["error"] = "wallet not connected"
+		return error
+	elif "value" in argument_dict:
+		var _amount = parseBigNumToNumber(argument_dict["value"])
+		if _amount > Web3Global.wallet_manager.wallet_balance:
+			if 0 == Web3Global.wallet_manager.wallet_balance:
+				error["error"] = "amount in wallet is 0"
+			else:
+				error["error"] = "amount is greater than the amount in wallet"
+			return error
+	return false
+
+## utilities
+func arr_to_str(arr:Array):
+	var s = ""
+	for value in arr:
+		match typeof(value):
+			TYPE_STRING:
+				if value.replace("n", "").is_valid_int(): # big number
+					s += ('%s, '%[value])
+				#elif value.begins_with("(address)"): # big number
+					#s += ('"%s", '%[value]).replace("(address)", "")
+				else:
+					s += ('"%s", '%[value]) # might change
+			TYPE_NIL:
+				s += ('%s, '%[value]).replace("<null>", "null")
+			_:
+				s += (' %s, '%[value])
+		
+	s = s.substr(0, s.length()-2)
+	return s
 
 func parseUnit(number, token_decimals=18):
 	number = str(number)
@@ -277,30 +227,51 @@ func parseBigNumToNumber(bignum: String, token_decimals: int = 18):
 	
 	return float(result)
 
-func delete_globals(varname:String):
-	JavaScriptBridge.eval("delete window.%s;"%(varname))
+## contractmethods
+# view/read contract (response)
+func _query_contract(args):
+	var response = args[0] if args.size() > 0 else null
+	updateoutput(null, response)
 
-# set/write contract (response)
+#func str_to_address(lstring):
+	#return "(address)"+lstring
+
+## set/write contract (response)
 func _execute_contract(args):
 	var response = args[0] if args.size() > 0 else null
 	var createPhaseTx = response
 	await wait_till(createPhaseTx.wait().then(wait))
 	Web3Global.wallet_manager.get_balance()
-	# improved version # test this with # execute, wait
+	updateoutput(null, OKS) # can be changed
 
-# write wait followupResponse (response)
-func _wait(args):# normal wait event wait
+## wait for transactions to finish
+func _wait(args):
 	var response = args[0] if args.size() > 0 else null
 	var createPhaseReceipt = response
-	if logs:
-		if createPhaseReceipt.logs.length > 0:
-			var arr_logs = createPhaseReceipt.logs
-			var abiString = createAbiFromFragment(arr_logs[0].fragment)
-			var iface = JsNew(_ethers.Interface,create_array([abiString]))
-			var decodedLog = iface.parseLog(arr_logs[0]);
-			logs = decodedLog.args
-			console.log("Phase created with ID:", logs)
+	var wait_dict = {
+		"recipt": null
+	}
+	if createPhaseReceipt.logs.length > 0:
+		var arr_logs = createPhaseReceipt.logs
+		var abiString = createAbiFromFragment(arr_logs[0].fragment)
+		var iface = JsNew(_ethers.Interface,create_array([abiString]))
+		var decodedLog = iface.parseLog(arr_logs[0]);
+		wait_dict["logs"] = decodedLog.args
+		console.log("Phase created with ID:", wait_dict["logs"])
+	wait_dict["recipt"] = createPhaseReceipt
+	wait_check = wait_dict
 	console.log(createPhaseReceipt)
+
+func finishTranscation(operation, waittime= 0.05):
+	wait_check = false
+	operation
+	while true:
+		await get_tree().create_timer(waittime).timeout
+		if wait_check:
+			break
+	var log = wait_check
+	wait_check = false # reset wait check
+	return log
 
 func createAbiFromFragment(fragment):
 	var inputs = fragment.inputs.map(JsLambda("input => `${input.type} ${input.name}`")).join(", ");

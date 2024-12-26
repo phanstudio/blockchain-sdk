@@ -108,7 +108,7 @@ func _init() -> void:
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]
+	]
 	contract = contract_manager.smartcontract(address, abi)
 
 func getEvmAddr(addr: int) -> String:
@@ -116,41 +116,33 @@ func getEvmAddr(addr: int) -> String:
 		contract.getEvmAddr,
 		[addr]
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getEvmAddr")
+	if logs != contract_manager.ERROR: return logs
+	assert( false, "ERROR: An error occured while calling getEvmAddr");
 	return ""
 
-func getSeiAddr(addr: String) -> int:
+func getSeiAddr(addr: String) -> String:
 	var logs = await contract_manager.runsafely(
 		contract.getSeiAddr,
 		[addr]
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getSeiAddr")
-	return 0
+	if logs != contract_manager.ERROR: return logs
+	assert( false, "ERROR: An error occured while calling getSeiAddr");
+	return ""
 
-func associate(v: int, r: int, s: int, customMessage: int) -> int:
+func associate(v: int, r: int, s: int, customMessage: int) -> Array:
 	var logs = await contract_manager.runsafely(
 		contract.associate,
 		[v, r, s, customMessage]
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling associate")
-	return 0
+	if logs != contract_manager.ERROR: return logs
+	assert( false, "ERROR: An error occured while calling associate");
+	return []
 
-func associatePubKey(pubKeyHex: int) -> int:
+func associatePubKey(pubKeyHex: int) -> Array:
 	var logs = await contract_manager.runsafely(
 		contract.associatePubKey,
 		[pubKeyHex]
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling associatePubKey")
-	return 0
+	if logs != contract_manager.ERROR: return logs
+	assert( false, "ERROR: An error occured while calling associatePubKey");
+	return []

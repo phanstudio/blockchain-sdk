@@ -35,7 +35,8 @@ enabled=PackedStringArray("res://addons/abi_importer/plugin.cfg", "res://addons/
 [file_customization]
 
 folder_colors={
-"res://addons/abi_importer/": "red"
+"res://addons/abi_importer/": "red",
+"res://addons/blockchain_sdk/": "gray"
 }
 
 [rendering]

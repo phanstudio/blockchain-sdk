@@ -978,267 +978,250 @@ func _init() -> void:
 		"stateMutability": "payable",
 		"type": "receive"
 	}
-]
+	]
 	contract = contract_manager.smartcontract(address, abi)
 
 func WSEI() -> String:
 	var logs = await contract_manager.runsafely(
-		contract.WSEI,
+		contract.WSEI,[],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling WSEI")
-	return ""
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
-func addLiquidity(tokenA: String, tokenB: String, amountADesired: int, amountBDesired: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> int:
+func addLiquidity(tokenA: String, tokenB: String, amountADesired: int, amountBDesired: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.addLiquidity,
-		[tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, to, deadline]
+		[tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling addLiquidity")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func addLiquiditySEI(token: String, amountTokenDesired: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> int:
+func addLiquiditySEI(token: String, amountTokenDesired: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.addLiquiditySEI,
-		[token, amountTokenDesired, amountTokenMin, amountSEIMin, to, deadline]
+		[token, amountTokenDesired, amountTokenMin, amountSEIMin, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling addLiquiditySEI")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
 func factory() -> String:
 	var logs = await contract_manager.runsafely(
-		contract.factory,
+		contract.factory,[],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling factory")
-	return ""
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
 func getAmountIn(amountOut: int, reserveIn: int, reserveOut: int) -> int:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountIn,
-		[amountOut, reserveIn, reserveOut]
+		[amountOut, reserveIn, reserveOut],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getAmountIn")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
 func getAmountOut(amountIn: int, reserveIn: int, reserveOut: int) -> int:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountOut,
-		[amountIn, reserveIn, reserveOut]
+		[amountIn, reserveIn, reserveOut],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getAmountOut")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
-func getAmountsIn(amountOut: int, path: int) -> int:
+func getAmountsIn(amountOut: int, path: int) -> Variant:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountsIn,
-		[amountOut, path]
+		[amountOut, path],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getAmountsIn")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
-func getAmountsOut(amountIn: int, path: int) -> int:
+func getAmountsOut(amountIn: int, path: int) -> Variant:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountsOut,
-		[amountIn, path]
+		[amountIn, path],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling getAmountsOut")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
 func quote(amountA: int, reserveA: int, reserveB: int) -> int:
 	var logs = await contract_manager.runsafely(
 		contract.quote,
-		[amountA, reserveA, reserveB]
+		[amountA, reserveA, reserveB],
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling quote")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
+	return logs
 
-func removeLiquidity(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> int:
+func removeLiquidity(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquidity,
-		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline]
+		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquidity")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func removeLiquiditySEI(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> int:
+func removeLiquiditySEI(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEI,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline]
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquiditySEI")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func removeLiquiditySEISupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> int:
+func removeLiquiditySEISupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEISupportingFeeOnTransferTokens,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline]
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquiditySEISupportingFeeOnTransferTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func removeLiquiditySEIWithPermit(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> int:
+func removeLiquiditySEIWithPermit(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEIWithPermit,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s]
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquiditySEIWithPermit")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> int:
+func removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s]
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func removeLiquidityWithPermit(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> int:
+func removeLiquidityWithPermit(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquidityWithPermit,
-		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline, approveMax, v, r, s]
+		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline, approveMax, v, r, s],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling removeLiquidityWithPermit")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactSEIForTokens(amountOutMin: int, path: int, to: String, deadline: int) -> int:
+func swapExactSEIForTokens(amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactSEIForTokens,
-		[amountOutMin, path, to, deadline]
+		[amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactSEIForTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactSEIForTokensSupportingFeeOnTransferTokens(amountOutMin: int, path: int, to: String, deadline: int) -> Variant:
+func swapExactSEIForTokensSupportingFeeOnTransferTokens(amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactSEIForTokensSupportingFeeOnTransferTokens,
-		[amountOutMin, path, to, deadline]
+		[amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactSEIForTokensSupportingFeeOnTransferTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactTokensForSEI(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> int:
+func swapExactTokensForSEI(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForSEI,
-		[amountIn, amountOutMin, path, to, deadline]
+		[amountIn, amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactTokensForSEI")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactTokensForSEISupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> Variant:
+func swapExactTokensForSEISupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForSEISupportingFeeOnTransferTokens,
-		[amountIn, amountOutMin, path, to, deadline]
+		[amountIn, amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactTokensForSEISupportingFeeOnTransferTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactTokensForTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> int:
+func swapExactTokensForTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForTokens,
-		[amountIn, amountOutMin, path, to, deadline]
+		[amountIn, amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactTokensForTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapExactTokensForTokensSupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> Variant:
+func swapExactTokensForTokensSupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForTokensSupportingFeeOnTransferTokens,
-		[amountIn, amountOutMin, path, to, deadline]
+		[amountIn, amountOutMin, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapExactTokensForTokensSupportingFeeOnTransferTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapSEIForExactTokens(amountOut: int, path: int, to: String, deadline: int) -> int:
+func swapSEIForExactTokens(amountOut: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapSEIForExactTokens,
-		[amountOut, path, to, deadline]
+		[amountOut, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapSEIForExactTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapTokensForExactSEI(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> int:
+func swapTokensForExactSEI(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapTokensForExactSEI,
-		[amountOut, amountInMax, path, to, deadline]
+		[amountOut, amountInMax, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapTokensForExactSEI")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);
 
-func swapTokensForExactTokens(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> int:
+func swapTokensForExactTokens(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapTokensForExactTokens,
-		[amountOut, amountInMax, path, to, deadline]
+		[amountOut, amountInMax, path, to, deadline],"execute"
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling swapTokensForExactTokens")
-	return 0
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);

@@ -11,6 +11,7 @@ signal balance_updated(balance: String)
 var wallet_address: String = ""
 var is_wallet_connected: bool = false
 var accounts = []
+var wallet_balance = 0
 
 const SUPPORTED_CHAINS = {
 	"ethereum": "0x1",  # Ethereum Mainnet
@@ -20,18 +21,23 @@ const SUPPORTED_CHAINS = {
 	"Sei-testnet": "0x530" # if you have it in your wallet
 }
 
-var _confirm_function = JavaScriptBridge.create_callback(_on_confirm)
 var signer_initialized = JavaScriptBridge.create_callback(_signer_initialized)
 var _connects = JavaScriptBridge.create_callback(_connect)
 var on_reconnect = JavaScriptBridge.create_callback(_on_reconnect)
 var on_reconnect_error = JavaScriptBridge.create_callback(_on_reconnect_error)
 var on_reject = JavaScriptBridge.create_callback(_on_reject)
 
+var _updatebalance = JavaScriptBridge.create_callback(
+	func(args):
+		var response = args[0] if args.size() > 0 else null
+		var balance = divide_by_pow10(hex_to_decimal_str(response)).pad_decimals(4)
+		wallet_balance = balance.to_float()
+		emit_signal("balance_updated", balance)
+)
+
 ### Wallet: Interacting with the wallet (connect,disconnect,getbalance,switchnetwork,initialize the signer)
 func _ready():
 	super._ready()
-	if OS.has_feature("web"):
-		window._confirm_function = _confirm_function
 
 ## Conect to the account (Operation)
 func connect_wallet() -> void:
@@ -54,20 +60,19 @@ func reconnect():
 	object.params = create_array([
 		obj1
 	])
-	wait_till(window.ethereum.request(object).then(on_reconnect).catch(on_reconnect_error))
+	await wait_till(window.ethereum.request(object).then(on_reconnect).catch(on_reconnect_error))
 
 func _on_reconnect(args):
 	var response = args[0] if args.size() > 0 else null
 	var object = new_obj()
 	object.method = "eth_requestAccounts"
-	wait_till(window.ethereum.request(object).then(_connects).catch(on_reject))
+	await wait_till(window.ethereum.request(object).then(_connects).catch(on_reject))
 	switch_network("Sei-devnet")
-	provider.getSigner().then(signer_initialized)
+	await wait_till(provider.getSigner().then(signer_initialized))
 	is_wallet_connected = false
 
 func _on_reconnect_error(args):
 	var response = args[0] if args.size() > 0 else null
-	#console.log(response)
 	is_wallet_connected = false
 
 func _connect(args):
@@ -86,94 +91,37 @@ func switch_network(chain_name: String) -> void:
 	if not SUPPORTED_CHAINS.has(chain_name):
 		emit_signal("connection_failed", "Unsupported chain")
 		return
-	var ethereum = JavaScriptBridge.get_interface("ethereum")
 	var chain_id = SUPPORTED_CHAINS[chain_name]
-	
-	# Request chain switch
-	var params = JSON.stringify([{
-		"chainId": chain_id
-	}])
-	
-	var javascript_code = """
-	(async () => {
-		if (typeof window.ethereum !== 'undefined') {
-			try {
-				await window.ethereum.request({ 
-					method: 'wallet_switchEthereumChain',
-					params: %s
-				});
-				window._confirm_function('switched'); 
-			} catch (error) {
-				console.log('error: ' + error.message)
-			}
-		} else {
-			console.log('error: No wallet found')
-		}
-	})();
-	""" % [params]
-	JavaScriptBridge.eval(javascript_code)
+	await wait_till(window.ethereum.request(
+		create_jsobj({ 
+			"method": 'wallet_switchEthereumChain',
+			"params": [{"chainId": chain_id}]
+		})
+	))
 
 ## Get current wallet balance (Operation)
 func get_balance() -> void:
 	if not is_wallet_connected:
-		emit_signal("connection_failed", "Wallet not connected")
+		emit_signal("connection_failed", "Wallet not connected") # doesn't exist fix
 		return
-	
-	var params = Json.stringify([wallet_address, "latest"])
-	var javascript_code = """
-	(async () => {
-		if (typeof window.ethereum !== 'undefined') {
-			try {
-				const balance = await window.ethereum.request({ 
-					method: 'eth_getBalance',
-					params: %s
-				});
-				window._confirm_function(['getbalance', balance]); 
-			} catch (error) {
-				console.log('error: ' + error.message)
-			}
-		} else {
-			console.log('error: No wallet found')
-		}
-	})();
-	""" % [params]
-	JavaScriptBridge.eval(javascript_code)
-
-### Get responses from operations
-func _on_confirm(args: Array) -> void:
-	var response = args[0] if args.size() > 0 else null
-	
-	if typeof(response) == TYPE_OBJECT:
-		response = [response[0], response[1]]
-	else:
-		response = [response]
-	
-	match response[0]:
-		"switched":
-			print(response[0])
-			pass
-		"getbalance":
-			var balance_wei = "0x" + response[1].trim_prefix("0x")
-			var balance = str(balance_wei.hex_to_int() / 1e18).pad_decimals(4)
-			print(balance) # set balance
-			emit_signal("balance_updated", balance)
-		_:
-			print("Signal not regstered response %s" % [response[0]])
+	await wait_till(window.ethereum.request(
+		create_jsobj({ 
+			"method": 'eth_getBalance',
+			"params": [wallet_address, "latest"]
+		})
+	).then(_updatebalance))
 
 ## Setter function (acounts)
 func set_accounts(response_array):
 	accounts.clear()
 	for i in range(response_array.length):
 		accounts.push_back(response_array[i])
-	console.log(accounts.size())
 	if accounts.size():
 		wallet_address = accounts[0]
 		is_wallet_connected = true
 		emit_signal("wallet_connected", accounts[0])
 		print(accounts)
 		get_balance()
-	
-	print(wallet_address)
 
 ## Intialiaze signer
 func _signer_initialized(args):

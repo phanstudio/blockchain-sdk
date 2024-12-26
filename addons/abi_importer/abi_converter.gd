@@ -1,5 +1,4 @@
 extends EditorScript
-
 class_name AbiConverter
 
 const HEADER_TEMPLATE = """extends Node
@@ -15,54 +14,86 @@ func _init() -> void:
 """
 
 static func convert_abi_to_gdscript(contract_name: String, address: String, abi: Array) -> String:
+	var abi_string = JSON.stringify(abi, "\t")
 	var output = HEADER_TEMPLATE.format({
 		"class_name": contract_name.capitalize().replace(" ", ""),
 		"address": address,
-		"abi": JSON.stringify(abi, "\t")
+		"abi": abi_string.left(abi_string.length() - 1) + "\t]"
 	})
 	
-	for item in abi:
-		if item.type != "function":
+	# work on type event, add functions for dfferent types
+	# add custom input for payables
+	for item in abi: 
+		if item.type != "function": 
 			continue
 			
 		var func_name = item.name
 		var inputs = []
 		var input_args = []
 		
-		for input in item.get("inputs", []):
+		for input in item.get("inputs", []): # maps correctly
 			var gdtype = "String" if input.type == "address" else "int"
+			match input.type:
+				"address":
+					gdtype = "String"
+				"String":
+					gdtype = "String"
+				"uint256":
+					gdtype = "int"
 			inputs.append("%s: %s" % [input.name, gdtype])
 			input_args.append(input.name)
 		
-		var return_type = "Variant"
-		if item.outputs.size() > 0:
+		var return_type = "Variant" # map corrrectly
+		if item.outputs.size() == 1:
 			var output_type = item.outputs[0].type
-			return_type = "String" if output_type == "address" else "int"
+			match output_type:
+				"address":
+					return_type = "String"
+				"string":
+					return_type = "String"
+				"uint256":
+					return_type = "int"
+				_:
+					return_type = "Variant"
+		if item.outputs.size() > 1:
+			return_type = "Array"
+		
+		var contract_type = ""
+		match item.stateMutability:
+			"nonpayable":
+				contract_type = "execute"
+			"payable":
+				contract_type = "execute"
+		
+		var default_return = "\n\treturn logs"
+		
+		if contract_type == "execute":
+			contract_type = '\n"execute"'
+			return_type = "void"
+			default_return = ""
 		
 		var function_template = """
 func {func_name}({params}) -> {return_type}:
 	var logs = await contract_manager.runsafely(
-		contract.{func_name},{args}
+		contract.{func_name},{args},{contract_type}
 	)
-	if logs != null:
-		contract_manager.console.log(logs)
-		return logs
-	printerr("Error calling {func_name}")
-	return {default_return}
+	assert(
+		logs != contract_manager.ERROR, 
+		"ERROR: An error occured while calling getSeiAddr"
+	);{default_return}
 """
 		
-		var args = ""
+		var args = "\n\t\t[]"
 		if not input_args.is_empty():
 			args = "\n\t\t[" + ", ".join(input_args) + "]"
 		
-		var default_return = '""' if return_type == "String" else "0"
-			
 		output += function_template.format({
 			"func_name": func_name,
 			"params": ", ".join(inputs),
 			"args": args,
 			"return_type": return_type,
-			"default_return": default_return
+			"default_return": default_return,
+			"contract_type": contract_type
 		})
 	return output
 
