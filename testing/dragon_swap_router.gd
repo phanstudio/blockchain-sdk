@@ -983,10 +983,11 @@ func _init() -> void:
 
 func WSEI() -> String:
 	var logs = await contract_manager.runsafely(
-		contract.WSEI,[],
+		contract.WSEI,
+		[],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 	return logs
@@ -994,53 +995,58 @@ func WSEI() -> String:
 func addLiquidity(tokenA: String, tokenB: String, amountADesired: int, amountBDesired: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.addLiquidity,
-		[tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, to, deadline],"execute"
+		[tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
-func addLiquiditySEI(token: String, amountTokenDesired: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
+func addLiquiditySEI(token: String, amountTokenDesired: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, value: Dictionary) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.addLiquiditySEI,
-		[token, amountTokenDesired, amountTokenMin, amountSEIMin, to, deadline],"execute"
+		[token, amountTokenDesired, amountTokenMin, amountSEIMin, to, deadline, value],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func factory() -> String:
 	var logs = await contract_manager.runsafely(
-		contract.factory,[],
+		contract.factory,
+		[],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 	return logs
 
-func getAmountIn(amountOut: int, reserveIn: int, reserveOut: int) -> int:
+func getAmountIn(amountOut: int, reserveIn: int, reserveOut: int) -> BigNum:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountIn,
 		[amountOut, reserveIn, reserveOut],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
+	logs = BigNum.new(logs)
 	return logs
 
-func getAmountOut(amountIn: int, reserveIn: int, reserveOut: int) -> int:
+func getAmountOut(amountIn: int, reserveIn: int, reserveOut: int) -> BigNum:
 	var logs = await contract_manager.runsafely(
 		contract.getAmountOut,
 		[amountIn, reserveIn, reserveOut],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
+	logs = BigNum.new(logs)
 	return logs
 
 func getAmountsIn(amountOut: int, path: int) -> Variant:
@@ -1049,7 +1055,7 @@ func getAmountsIn(amountOut: int, path: int) -> Variant:
 		[amountOut, path],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 	return logs
@@ -1060,168 +1066,184 @@ func getAmountsOut(amountIn: int, path: int) -> Variant:
 		[amountIn, path],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 	return logs
 
-func quote(amountA: int, reserveA: int, reserveB: int) -> int:
+func quote(amountA: int, reserveA: int, reserveB: int) -> BigNum:
 	var logs = await contract_manager.runsafely(
 		contract.quote,
 		[amountA, reserveA, reserveB],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
+	logs = BigNum.new(logs)
 	return logs
 
 func removeLiquidity(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquidity,
-		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline],"execute"
+		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func removeLiquiditySEI(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEI,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],"execute"
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func removeLiquiditySEISupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEISupportingFeeOnTransferTokens,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],"execute"
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func removeLiquiditySEIWithPermit(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEIWithPermit,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],"execute"
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens(token: String, liquidity: int, amountTokenMin: int, amountSEIMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquiditySEIWithPermitSupportingFeeOnTransferTokens,
-		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],"execute"
+		[token, liquidity, amountTokenMin, amountSEIMin, to, deadline, approveMax, v, r, s],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func removeLiquidityWithPermit(tokenA: String, tokenB: String, liquidity: int, amountAMin: int, amountBMin: int, to: String, deadline: int, approveMax: int, v: int, r: int, s: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.removeLiquidityWithPermit,
-		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline, approveMax, v, r, s],"execute"
+		[tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline, approveMax, v, r, s],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
-func swapExactSEIForTokens(amountOutMin: int, path: int, to: String, deadline: int) -> void:
+func swapExactSEIForTokens(amountOutMin: int, path: int, to: String, deadline: int, value: Dictionary) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactSEIForTokens,
-		[amountOutMin, path, to, deadline],"execute"
+		[amountOutMin, path, to, deadline, value],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
-func swapExactSEIForTokensSupportingFeeOnTransferTokens(amountOutMin: int, path: int, to: String, deadline: int) -> void:
+func swapExactSEIForTokensSupportingFeeOnTransferTokens(amountOutMin: int, path: int, to: String, deadline: int, value: Dictionary) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactSEIForTokensSupportingFeeOnTransferTokens,
-		[amountOutMin, path, to, deadline],"execute"
+		[amountOutMin, path, to, deadline, value],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapExactTokensForSEI(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForSEI,
-		[amountIn, amountOutMin, path, to, deadline],"execute"
+		[amountIn, amountOutMin, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapExactTokensForSEISupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForSEISupportingFeeOnTransferTokens,
-		[amountIn, amountOutMin, path, to, deadline],"execute"
+		[amountIn, amountOutMin, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapExactTokensForTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForTokens,
-		[amountIn, amountOutMin, path, to, deadline],"execute"
+		[amountIn, amountOutMin, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapExactTokensForTokensSupportingFeeOnTransferTokens(amountIn: int, amountOutMin: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapExactTokensForTokensSupportingFeeOnTransferTokens,
-		[amountIn, amountOutMin, path, to, deadline],"execute"
+		[amountIn, amountOutMin, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
-func swapSEIForExactTokens(amountOut: int, path: int, to: String, deadline: int) -> void:
+func swapSEIForExactTokens(amountOut: int, path: int, to: String, deadline: int, value: Dictionary) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapSEIForExactTokens,
-		[amountOut, path, to, deadline],"execute"
+		[amountOut, path, to, deadline, value],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapTokensForExactSEI(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapTokensForExactSEI,
-		[amountOut, amountInMax, path, to, deadline],"execute"
+		[amountOut, amountInMax, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);
 
 func swapTokensForExactTokens(amountOut: int, amountInMax: int, path: int, to: String, deadline: int) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.swapTokensForExactTokens,
-		[amountOut, amountInMax, path, to, deadline],"execute"
+		[amountOut, amountInMax, path, to, deadline],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
+		str(logs) != contract_manager.ERROR, 
 		"ERROR: An error occured while calling getSeiAddr"
 	);

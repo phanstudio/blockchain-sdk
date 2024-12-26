@@ -164,7 +164,7 @@ func strip_trailing_zeros(number_str: String) -> String:
 		number_str = number_str.substr(0, number_str.length() - 1)
 	return number_str
 
-## shorten hex
+## shorten hex from 0x#### to 0x##..##
 func shorten_hex(hex_string: String, header: String = "0x") -> String:
 	# Ensure the string is in uppercase and starts with "0x"
 	hex_string = hex_string.strip_edges()#.to_upper()

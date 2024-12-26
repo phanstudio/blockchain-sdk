@@ -15,6 +15,7 @@ var sign_error = JavaScriptBridge.create_callback(_sign_error)
 const ERROR = "error;"
 const OKS = "ok;"
 var wait_check = false
+var processing = false
 
 var output_logs = {
 	"error": null,
@@ -25,6 +26,8 @@ var safeerror = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
 		updateoutput(response)
+		wait_check = false
+		processing = false
 )
 var jsreturn = JavaScriptBridge.create_callback(
 	func(args):
@@ -54,45 +57,49 @@ func smartcontract(contract_address, contract_abi):
 
 ## The run methods
 func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
-	var runlogs
-	var args:String = arr_to_str(args1)
-	window.contractmethod = contractmethod.estimateGas
-	var error = handelDefualtErrors(args)
-	if not error:
-		var javascript_code = """
-			async function checkWillFailAsync() {
-				try {
-					const gasEstimate = await window.contractmethod(%s);
-					return {
-						willFail: false,
-						error: null,
-						gasEstimate: gasEstimate.toString()
-					};
-				} catch (error) {
-					return {
-						willFail: true,
-						error: error.message,
-						gasEstimate: null
-					};
+	if not processing:
+		processing = true
+		var runlogs
+		var args:String = arr_to_str(args1)
+		window.contractmethod = contractmethod.estimateGas
+		var error = handelDefualtErrors(args)
+		if not error:
+			var javascript_code = """
+				async function checkWillFailAsync() {
+					try {
+						const gasEstimate = await window.contractmethod(%s);
+						return {
+							willFail: false,
+							error: null,
+							gasEstimate: gasEstimate.toString()
+						};
+					} catch (error) {
+						return {
+							willFail: true,
+							error: error.message,
+							gasEstimate: null
+						};
+					}
 				}
-			}
-		window.result = checkWillFailAsync
-		"""%[args]
-		JavaScriptBridge.eval(javascript_code);
-		await wait_till(window.result().then(jsreturn))
-		delete_globals("contractmethod")
-		delete_globals("result")
-		runlogs = jsreturnvalue
-		jsreturnvalue = null
-	else:
-		runlogs = create_jsobj(error)
-	if not runlogs.willFail: # add return values for success
-		await run(contractmethod, args, _method)
-		if output_logs["error"] == null:
-			return output_logs["output"]
-		printerr("Error: "+ output_logs["error"])
+			window.result = checkWillFailAsync
+			"""%[args]
+			JavaScriptBridge.eval(javascript_code);
+			await wait_till(window.result().then(jsreturn))
+			delete_globals("contractmethod")
+			delete_globals("result")
+			runlogs = jsreturnvalue
+			jsreturnvalue = null
+		else:
+			runlogs = create_jsobj(error)
+		if not runlogs.willFail: # add return values for success
+			await run(contractmethod, args, _method)
+			if output_logs["error"] == null:
+				# add a delay before this
+				return output_logs["output"]
+			return ERROR
+		updateoutput(runlogs.error)
 		return ERROR
-	printerr("Error: "+ runlogs.error)
+	updateoutput("still processing a transaction")
 	return ERROR
 
 func run(_method, args: String, _type: String= "query"): # add contract executed
@@ -109,16 +116,12 @@ func run(_method, args: String, _type: String= "query"): # add contract executed
 	window.result = run_contract
 	"""%[args]
 	JavaScriptBridge.eval(javascript_code);
-	#var execute = query_contract
 	if _type == "execute":
-		#execute = execute_contract
 		await finishTranscation(window.result().then(execute_contract).catch(safeerror))
 	else:
 		await wait_till(window.result().then(query_contract).catch(safeerror))
-	#await wait_till(window.result().then(execute).catch(safeerror)) # add retrive logs option
 	delete_globals("contractmethod")
 	delete_globals("result")
-	print(7)
 
 func updateoutput(_error=null, _output=null):
 	output_logs["error"] = _error
@@ -227,29 +230,34 @@ func parseBigNumToNumber(bignum: String, token_decimals: int = 18):
 	
 	return float(result)
 
-## contractmethods
-# view/read contract (response)
+### contractmethods
+## view/read contract (response)
 func _query_contract(args):
 	var response = args[0] if args.size() > 0 else null
 	updateoutput(null, response)
+	processing = false
 
 #func str_to_address(lstring):
 	#return "(address)"+lstring
 
 ## set/write contract (response)
-func _execute_contract(args):
+func _execute_contract(args): #imporve wait to finsh completly
 	var response = args[0] if args.size() > 0 else null
 	var createPhaseTx = response
 	await wait_till(createPhaseTx.wait().then(wait))
 	Web3Global.wallet_manager.get_balance()
-	updateoutput(null, OKS) # can be changed
+	wait_check = output_logs["output"]
+	#updateoutput(null, OKS) # can be changed
+	processing = false
+	print(wait_check)
+	console.log(wait_check["receipt"])
 
 ## wait for transactions to finish
 func _wait(args):
 	var response = args[0] if args.size() > 0 else null
 	var createPhaseReceipt = response
 	var wait_dict = {
-		"recipt": null
+		"receipt": null
 	}
 	if createPhaseReceipt.logs.length > 0:
 		var arr_logs = createPhaseReceipt.logs
@@ -258,9 +266,8 @@ func _wait(args):
 		var decodedLog = iface.parseLog(arr_logs[0]);
 		wait_dict["logs"] = decodedLog.args
 		console.log("Phase created with ID:", wait_dict["logs"])
-	wait_dict["recipt"] = createPhaseReceipt
-	wait_check = wait_dict
-	console.log(createPhaseReceipt)
+	wait_dict["receipt"] = createPhaseReceipt
+	updateoutput(null, wait_dict)
 
 func finishTranscation(operation, waittime= 0.05):
 	wait_check = false

@@ -96,6 +96,7 @@ func switch_network(chain_name: String) -> void:
 			"params": [{"chainId": chain_id}]
 		})
 	))
+	print("switched: ", chain_name)
 
 ## Get current wallet balance (Operation)
 func get_balance() -> void:

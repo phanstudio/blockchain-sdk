@@ -1,11 +1,11 @@
 extends Node
-class_name CoinFlipContract
+class_name HackFlipContract
 
 var contract: JavaScriptObject
 var contract_manager: ContractManager = Web3Global.contract_manager
 
 func _init() -> void:
-	var address = '0xb33a6b046c5152737ed46ae2c14bb04de497bd28'
+	var address = '0xD4123BF1567978533DAe2CDA6b868929267eE06C'
 	var abi = [
 	{
 		"inputs": [
@@ -58,30 +58,37 @@ func _init() -> void:
 func coinFlipGuess(_coinFlipAddr: String) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.coinFlipGuess,
-		[_coinFlipAddr],"execute"
+		[_coinFlipAddr],
+		"execute"
 	)
 	assert(
-		logs != contract_manager.ERROR, 
-		"ERROR: An error occured while calling getSeiAddr"
+		str(logs) != contract_manager.ERROR and logs != null, 
+		"ERROR: An error occured while calling getSeiAddr, %s" % 
+		[contract_manager.output_logs["error"]]
 	);
 
-func consecutiveWins() -> int:
+func consecutiveWins() -> BigNum:
 	var logs = await contract_manager.runsafely(
-		contract.consecutiveWins,[],
+		contract.consecutiveWins,
+		[],
 	)
-	contract_manager.console.log(logs.toString())
 	assert(
-		logs != contract_manager.ERROR, 
-		"ERROR: An error occured while calling getSeiAddr"
+		str(logs) != contract_manager.ERROR and logs != null, 
+		"ERROR: An error occured while calling getSeiAddr, %s" % 
+		[contract_manager.output_logs["error"]]
 	);
+	logs = BigNum.new(logs)
 	return logs
 
-func FACTOR() -> int:
+func FACTOR() -> BigNum:
 	var logs = await contract_manager.runsafely(
-		contract.FACTOR,[],
+		contract.FACTOR,
+		[],
 	)
 	assert(
-		logs != contract_manager.ERROR, 
-		"ERROR: An error occured while calling getSeiAddr"
+		str(logs) != contract_manager.ERROR and logs != null, 
+		"ERROR: An error occured while calling getSeiAddr, %s" % 
+		[contract_manager.output_logs["error"]]
 	);
+	logs = BigNum.new(logs)
 	return logs
