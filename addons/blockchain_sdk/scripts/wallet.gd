@@ -24,9 +24,12 @@ const SUPPORTED_CHAINS = {
 var signer_initialized = JavaScriptBridge.create_callback(_signer_initialized)
 var _connects = JavaScriptBridge.create_callback(_connect)
 var on_reconnect = JavaScriptBridge.create_callback(_on_reconnect)
-var on_reconnect_error = JavaScriptBridge.create_callback(_on_reconnect_error)
-var on_reject = JavaScriptBridge.create_callback(_on_reject)
 
+var on_reject = JavaScriptBridge.create_callback(
+	func(args):
+		var response = args[0] if args.size() > 0 else null
+		is_wallet_connected = false
+)
 var _updatebalance = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
@@ -49,31 +52,26 @@ func connect_wallet() -> void:
 		return
 	is_wallet_connected = true
 	reconnect()
-	
-	# create a wait for function for cotracts that need to use them
 
 func reconnect():
-	var object = new_obj()
-	var obj1 = new_obj()
-	object.method = "wallet_requestPermissions"
-	obj1.eth_accounts = new_obj()
-	object.params = create_array([
-		obj1
-	])
-	await wait_till(window.ethereum.request(object).then(on_reconnect).catch(on_reconnect_error))
+	await wait_till(window.ethereum.request(
+		create_jsobj({
+			"method": "wallet_requestPermissions",
+			"params": [{"eth_accounts": {}}]
+		})
+	).then(on_reconnect).catch(on_reject))
 
 func _on_reconnect(args):
 	var response = args[0] if args.size() > 0 else null
-	var object = new_obj()
-	object.method = "eth_requestAccounts"
-	await wait_till(window.ethereum.request(object).then(_connects).catch(on_reject))
-	switch_network("Sei-devnet")
-	await wait_till(provider.getSigner().then(signer_initialized))
 	is_wallet_connected = false
-
-func _on_reconnect_error(args):
-	var response = args[0] if args.size() > 0 else null
-	is_wallet_connected = false
+	await wait_till(window.ethereum.request(
+		create_jsobj({
+			"method": "eth_requestAccounts"
+		})
+	).then(_connects).catch(on_reject))
+	if is_wallet_connected:
+		switch_network("Sei-devnet")
+		await wait_till(provider.getSigner().then(signer_initialized))
 
 func _connect(args):
 	var response = args[0] if args.size() > 0 else null
@@ -128,15 +126,3 @@ func _signer_initialized(args):
 	var response = args[0] if args.size() > 0 else null
 	signer = response
 	window.signer = signer
-
-func shorten_hex(hex_string: String, header: String = "0x") -> String:
-	# Ensure the string is in uppercase and starts with "0x"
-	hex_string = hex_string.strip_edges()#.to_upper()
-	if not hex_string.begins_with(header):
-		hex_string = header + hex_string
-	# Shorten the string to the first 4 and last 4 characters
-	if len(hex_string) > 10:  # At least "0x" + 8 characters
-		return "%s%s...%s"%[hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4)]
-		#return "{}{}...{}".format(hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4))
-	else:
-		return hex_string

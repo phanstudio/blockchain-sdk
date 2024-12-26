@@ -164,6 +164,20 @@ func strip_trailing_zeros(number_str: String) -> String:
 		number_str = number_str.substr(0, number_str.length() - 1)
 	return number_str
 
+## shorten hex
+func shorten_hex(hex_string: String, header: String = "0x") -> String:
+	# Ensure the string is in uppercase and starts with "0x"
+	hex_string = hex_string.strip_edges()#.to_upper()
+	if not hex_string.begins_with(header):
+		hex_string = header + hex_string
+	# Shorten the string to the first 4 and last 4 characters
+	if len(hex_string) > 10:  # At least "0x" + 8 characters
+		return "%s%s...%s"%[hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4)]
+		#return "{}{}...{}".format(hex_string.substr(0, 4), hex_string.substr(4, 2), hex_string.right(4))
+	else:
+		return hex_string
+
+
 # wrap the wait_till() function on the promise
 # eg: await wait_till(contract.createPhase(2, 1, contract_payment).then(execute_contract))
 # this is how you call it
