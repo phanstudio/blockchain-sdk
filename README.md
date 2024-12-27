@@ -19,7 +19,7 @@ The SDK consists of several key components:
 1. `JsWeb3Node`: Base class for Web3 functionality
 2. `Wallet`: Manages wallet connections and account information
 3. `ContractManager`: Handles smart contract interactions
-4. `Web3Global`: Global access point for blockchain functionality
+4. `Web3Global`: Global access point for blockchain functionality 
 
 
 ## Support
