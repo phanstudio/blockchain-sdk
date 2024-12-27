@@ -237,8 +237,6 @@ func _query_contract(args):
 	updateoutput(null, response)
 	processing = false
 
-#func str_to_address(lstring):
-	#return "(address)"+lstring
 
 ## set/write contract (response)
 func _execute_contract(args): #imporve wait to finsh completly

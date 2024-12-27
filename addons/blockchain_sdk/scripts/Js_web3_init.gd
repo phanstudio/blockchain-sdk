@@ -291,3 +291,6 @@ func _on_reject(args):
 
 func new_obj():
 	return JavaScriptBridge.create_object('Object') 
+
+#func str_to_address(lstring):
+	#return "(address)"+lstring

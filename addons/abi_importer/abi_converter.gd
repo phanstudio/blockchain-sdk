@@ -97,6 +97,7 @@ static func _generate_array_converter() -> String:
 		outputs.append(output)
 	logs = outputs
 """
+	pass
 
 static func _get_contract_type(stateMutability: String) -> String:
 	match stateMutability:
