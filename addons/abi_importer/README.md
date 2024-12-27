@@ -139,4 +139,4 @@ Contributions are welcome! Please follow these steps:
 
 ## Contact
 
-(twitter)[https://x.com/Phan73764817]
+[twitter](https://x.com/Phan73764817)
