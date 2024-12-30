@@ -1,0 +1,408 @@
+[gd_scene load_steps=15 format=3 uid="uid://cwxawj42dlkhr"]
+
+[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://wallet_interface/connectbutton.tscn" id="1_1ddmr"]
+[ext_resource type="Texture2D" uid="uid://bji4qje8aj8w6" path="res://assets/icons/Sei_Symbol_Gradient.svg" id="1_e5uy7"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://wallet_interface/wallet_interface.tscn" id="2_2yyan"]
+[ext_resource type="Texture2D" uid="uid://dwvivy3gkdgp8" path="res://assets/icons/dashboard.svg" id="2_ehli2"]
+[ext_resource type="Texture2D" uid="uid://b25for376gbxu" path="res://assets/icons/sync.png" id="3_8ut0k"]
+[ext_resource type="Texture2D" uid="uid://b4jft51deluw8" path="res://assets/icons/database.png" id="3_bih6q"]
+[ext_resource type="Texture2D" uid="uid://hmgysu5ddkno" path="res://assets/icons/coins.png" id="3_oom5g"]
+[ext_resource type="Texture2D" uid="uid://bo2j0xtk5o883" path="res://assets/icons/send.png" id="4_a7fwr"]
+[ext_resource type="Texture2D" uid="uid://4w6ll0nqjp1h" path="res://assets/icons/deployed_code_history.png" id="4_gl0ly"]
+[ext_resource type="Texture2D" uid="uid://cj2ix8l2ywjfr" path="res://assets/icons/profit.png" id="9_ithl0"]
+[ext_resource type="Script" path="res://checkseiaddress.gd" id="10_yindx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y3um"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.211765, 0.321569, 0.909804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pixir"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36, 0.36, 0.36, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u8kua"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.211765, 0.321569, 0.909804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Mainapp" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Main" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="AppDrawer" type="VBoxContainer" parent="Main"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Control" type="Control" parent="Main/AppDrawer"]
+layout_mode = 2
+
+[node name="title" type="HBoxContainer" parent="Main/AppDrawer"]
+layout_mode = 2
+alignment = 1
+
+[node name="img" type="TextureRect" parent="Main/AppDrawer/title"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("1_e5uy7")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Main/AppDrawer/title"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "sei"
+
+[node name="Dashboard" type="PanelContainer" parent="Main/AppDrawer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6y3um")
+
+[node name="Dashboard" type="HBoxContainer" parent="Main/AppDrawer/Dashboard"]
+layout_mode = 2
+alignment = 1
+
+[node name="img" type="TextureRect" parent="Main/AppDrawer/Dashboard/Dashboard"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("2_ehli2")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Stack" type="HBoxContainer" parent="Main/AppDrawer"]
+layout_mode = 2
+alignment = 1
+
+[node name="img" type="TextureRect" parent="Main/AppDrawer/Stack"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+texture_filter = 2
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("3_oom5g")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Bridge" type="HBoxContainer" parent="Main/AppDrawer"]
+layout_mode = 2
+alignment = 1
+
+[node name="img" type="TextureRect" parent="Main/AppDrawer/Bridge"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("3_8ut0k")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="transfer" type="HBoxContainer" parent="Main/AppDrawer"]
+layout_mode = 2
+alignment = 1
+
+[node name="img" type="TextureRect" parent="Main/AppDrawer/transfer"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("4_a7fwr")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="Main"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Body" type="VBoxContainer" parent="Main"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Appbar" type="VBoxContainer" parent="Main/Body"]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Main/Body/Appbar"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Row" type="HBoxContainer" parent="Main/Body/Appbar/Header"]
+layout_mode = 2
+
+[node name="Dashboardbody" type="HBoxContainer" parent="Main/Body/Appbar/Header/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="img" type="TextureRect" parent="Main/Body/Appbar/Header/Row/Dashboardbody"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+texture = ExtResource("2_ehli2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DashboardLabel" type="Label" parent="Main/Body/Appbar/Header/Row/Dashboardbody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Dashboard"
+
+[node name="connectbutton" parent="Main/Body/Appbar/Header/Row" instance=ExtResource("1_1ddmr")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Main/Body/Appbar"]
+layout_mode = 2
+
+[node name="margin" type="MarginContainer" parent="Main/Body"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="mainbody" type="VBoxContainer" parent="Main/Body/margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StatsLabel" type="Label" parent="Main/Body/margin/mainbody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Stats"
+
+[node name="Stats" type="HBoxContainer" parent="Main/Body/margin/mainbody"]
+layout_mode = 2
+
+[node name="blockheightCard" type="PanelContainer" parent="Main/Body/margin/mainbody/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_pixir")
+
+[node name="Row" type="HBoxContainer" parent="Main/Body/margin/mainbody/Stats/blockheightCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="img" type="TextureRect" parent="Main/Body/margin/mainbody/Stats/blockheightCard/Row"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("3_bih6q")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CardBody2" type="VBoxContainer" parent="Main/Body/margin/mainbody/Stats/blockheightCard/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Label" type="Label" parent="Main/Body/margin/mainbody/Stats/blockheightCard/Row/CardBody2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Block Height
+"
+
+[node name="value" type="Label" parent="Main/Body/margin/mainbody/Stats/blockheightCard/Row/CardBody2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19, 0.19, 0.19, 1)
+text = "123,040,516"
+
+[node name="Avgblocktime" type="PanelContainer" parent="Main/Body/margin/mainbody/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_pixir")
+
+[node name="Row" type="HBoxContainer" parent="Main/Body/margin/mainbody/Stats/Avgblocktime"]
+layout_mode = 2
+
+[node name="img" type="TextureRect" parent="Main/Body/margin/mainbody/Stats/Avgblocktime/Row"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("4_gl0ly")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CardBody" type="VBoxContainer" parent="Main/Body/margin/mainbody/Stats/Avgblocktime/Row"]
+layout_mode = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Label" type="Label" parent="Main/Body/margin/mainbody/Stats/Avgblocktime/Row/CardBody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Avg Block Time"
+
+[node name="value" type="Label" parent="Main/Body/margin/mainbody/Stats/Avgblocktime/Row/CardBody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19, 0.19, 0.19, 1)
+text = "0.499s"
+
+[node name="Totalsupply" type="PanelContainer" parent="Main/Body/margin/mainbody/Stats"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_pixir")
+
+[node name="Row" type="HBoxContainer" parent="Main/Body/margin/mainbody/Stats/Totalsupply"]
+layout_mode = 2
+
+[node name="img" type="TextureRect" parent="Main/Body/margin/mainbody/Stats/Totalsupply/Row"]
+self_modulate = Color(0.0646965, 0.0646965, 0.0646965, 1)
+texture_filter = 4
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("9_ithl0")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CardBody" type="VBoxContainer" parent="Main/Body/margin/mainbody/Stats/Totalsupply/Row"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="Main/Body/margin/mainbody/Stats/Totalsupply/Row/CardBody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Total Supply (Sei) "
+
+[node name="value" type="Label" parent="Main/Body/margin/mainbody/Stats/Totalsupply/Row/CardBody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19, 0.19, 0.19, 1)
+text = "8.883447B"
+
+[node name="OverviewLabel" type="Label" parent="Main/Body/margin/mainbody"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Overview"
+
+[node name="Overview" type="PanelContainer" parent="Main/Body/margin/mainbody"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_pixir")
+
+[node name="row" type="HBoxContainer" parent="Main/Body/margin/mainbody/Overview"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="checkseiaddress" type="VBoxContainer" parent="Main/Body/margin/mainbody/Overview/row" groups=["web3dependants"]]
+layout_mode = 2
+script = ExtResource("10_yindx")
+
+[node name="tittle" type="Label" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Check sei address alternative"
+
+[node name="row" type="HBoxContainer" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress"]
+layout_mode = 2
+alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "add evm address"
+
+[node name="prefill" type="Button" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_u8kua")
+text = "prefill
+"
+
+[node name="generate" type="Button" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_u8kua")
+text = "Generate"
+
+[node name="row2" type="HBoxContainer" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress"]
+layout_mode = 2
+alignment = 2
+
+[node name="address" type="Label" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "address:"
+
+[node name="copybutton" type="Button" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2"]
+layout_mode = 2
+text = "copy"
+
+[node name="CardBody2" type="VBoxContainer" parent="Main/Body/margin/mainbody/Overview/row" groups=["connect_node"]]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="Main/Body/margin/mainbody/Overview/row/CardBody2" groups=["connect_node"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "Connect your wallet to view overview"
+horizontal_alignment = 1
+
+[node name="connectbutton" parent="Main/Body/margin/mainbody/Overview/row/CardBody2" instance=ExtResource("1_1ddmr")]
+layout_mode = 2
+size_flags_horizontal = 4
+use_internal = false
+
+[node name="wallet_Interface" parent="." node_paths=PackedStringArray("mainconnectbutton") instance=ExtResource("2_2yyan")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mainconnectbutton = [NodePath("../Main/Body/margin/mainbody/Overview/row/CardBody2/connectbutton"), NodePath("../Main/Body/Appbar/Header/Row/connectbutton")]
+
+[connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row/prefill" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="prefil_text"]
+[connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/generate" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="onclick"]
+[connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2/copybutton" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="copy_to_clipboard"]

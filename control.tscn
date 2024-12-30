@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://km7xf73p1qd7"]
+
+[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://wallet_interface/connectbutton.tscn" id="1_lmyvp"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://wallet_interface/wallet_interface.tscn" id="2_yg4hg"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="connectbutton" parent="." instance=ExtResource("1_lmyvp")]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 9.0
+offset_right = 102.0
+offset_bottom = 49.0
+
+[node name="connectbutton2" parent="." instance=ExtResource("1_lmyvp")]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 73.0
+offset_right = 102.0
+offset_bottom = 113.0
+
+[node name="wallet_Interface" parent="." node_paths=PackedStringArray("mainconnectbutton") instance=ExtResource("2_yg4hg")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mainconnectbutton = [NodePath("../connectbutton"), NodePath("../connectbutton2")]

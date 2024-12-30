@@ -103,6 +103,8 @@ func get_balance() -> void:
 	if not is_wallet_connected:
 		emit_signal("connection_failed", "Wallet not connected") # doesn't exist fix
 		return
+	#let balance = await provider.getBalance(wallet);
+	#balance = ethers.utils.formatEther(balance);
 	await wait_till(window.ethereum.request(
 		create_jsobj({ 
 			"method": 'eth_getBalance',

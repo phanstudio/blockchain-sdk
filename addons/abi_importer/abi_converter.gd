@@ -1,6 +1,13 @@
 extends EditorScript
 class_name AbiConverter
 
+# add support for this type abi's convert the abi we use in the contract to this makes it more readable
+#"function name() view returns (string)",
+#"function symbol() view returns (string)",
+#"function decimals() view returns (uint8)",
+#"function totalSupply() view returns (uint256)",
+
+
 const HEADER_TEMPLATE = """extends Node
 class_name {class_name}Contract
 var contract: JavaScriptObject
