@@ -1,8 +1,8 @@
 [gd_scene load_steps=15 format=3 uid="uid://cwxawj42dlkhr"]
 
-[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://wallet_interface/connectbutton.tscn" id="1_1ddmr"]
+[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://addons/wallet_interface/src/connectbutton.tscn" id="1_1ddmr"]
 [ext_resource type="Texture2D" uid="uid://bji4qje8aj8w6" path="res://assets/icons/Sei_Symbol_Gradient.svg" id="1_e5uy7"]
-[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://wallet_interface/wallet_interface.tscn" id="2_2yyan"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/wallet_interface.tscn" id="2_2yyan"]
 [ext_resource type="Texture2D" uid="uid://dwvivy3gkdgp8" path="res://assets/icons/dashboard.svg" id="2_ehli2"]
 [ext_resource type="Texture2D" uid="uid://b25for376gbxu" path="res://assets/icons/sync.png" id="3_8ut0k"]
 [ext_resource type="Texture2D" uid="uid://b4jft51deluw8" path="res://assets/icons/database.png" id="3_bih6q"]
@@ -330,6 +330,7 @@ layout_mode = 2
 size_flags_vertical = 4
 
 [node name="checkseiaddress" type="VBoxContainer" parent="Main/Body/margin/mainbody/Overview/row" groups=["web3dependants"]]
+visible = false
 layout_mode = 2
 script = ExtResource("10_yindx")
 
@@ -374,6 +375,10 @@ text = "address:"
 layout_mode = 2
 text = "copy"
 
+[node name="copybutton" type="Button" parent="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2/copybutton"]
+layout_mode = 0
+text = "copy"
+
 [node name="CardBody2" type="VBoxContainer" parent="Main/Body/margin/mainbody/Overview/row" groups=["connect_node"]]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -400,9 +405,9 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 mainconnectbutton = [NodePath("../Main/Body/margin/mainbody/Overview/row/CardBody2/connectbutton"), NodePath("../Main/Body/Appbar/Header/Row/connectbutton")]
 
 [connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row/prefill" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="prefil_text"]
 [connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/generate" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="onclick"]
 [connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2/copybutton" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="copy_to_clipboard"]
+[connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row2/copybutton/copybutton" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="copy_to_clipboard"]

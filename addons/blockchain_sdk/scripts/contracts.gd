@@ -91,6 +91,7 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 			jsreturnvalue = null
 		else:
 			runlogs = create_jsobj(error)
+		console.log(runlogs) # catch the error
 		if not runlogs.willFail: # add return values for success
 			await run(contractmethod, args, _method)
 			if output_logs["error"] == null:

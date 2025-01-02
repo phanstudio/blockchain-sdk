@@ -5,7 +5,7 @@ extends Control
 	#if event.keycode == KEY_T:
 		#print("T was pressed")
 
-@onready var connected_section: PanelContainer = $ConnectedSection
+@onready var connected_section = $ConnectedSection
 @onready var connect_wallet: PanelContainer = $connect_wallet
 @onready var wallet = Web3Global.wallet_manager
 @onready var close_section: Panel = $close_section

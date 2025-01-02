@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjxahy1n0s04b"
-path="res://.godot/imported/filter_tilt_shift.png-f58f0c8609947e90d01f1d4d5f408065.ctex"
+uid="uid://cnhf7nllv6457"
+path="res://.godot/imported/brick.png-942337dd9d219bc1b0aa540d1bdd342c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/filter_tilt_shift.png"
-dest_files=["res://.godot/imported/filter_tilt_shift.png-f58f0c8609947e90d01f1d4d5f408065.ctex"]
+source_file="res://addons/wallet_interface/assets/icons/brick.png"
+dest_files=["res://.godot/imported/brick.png-942337dd9d219bc1b0aa540d1bdd342c.ctex"]
 
 [params]
 

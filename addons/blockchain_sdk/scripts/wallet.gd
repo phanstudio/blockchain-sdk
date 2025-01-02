@@ -6,7 +6,6 @@ signal wallet_connected(address: String)
 signal wallet_disconnected
 signal wallet_error(error: String)
 signal balance_updated(balance: String)
-# add signal to connect wallets
 
 var wallet_address: String = ""
 var is_wallet_connected: bool = false

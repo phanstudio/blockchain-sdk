@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6rl84s18fbas"
-path="res://.godot/imported/pexels-maumascaro-376533.jpg-dd69db3dd0aa6c33240c62ee7419e17f.ctex"
+uid="uid://c6qauk3qwiuxm"
+path="res://.godot/imported/3d-print.png-9f32a993300d537954518b69a476ff10.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pexels-maumascaro-376533.jpg"
-dest_files=["res://.godot/imported/pexels-maumascaro-376533.jpg-dd69db3dd0aa6c33240c62ee7419e17f.ctex"]
+source_file="res://addons/wallet_interface/assets/icons/3d-print.png"
+dest_files=["res://.godot/imported/3d-print.png-9f32a993300d537954518b69a476ff10.ctex"]
 
 [params]
 

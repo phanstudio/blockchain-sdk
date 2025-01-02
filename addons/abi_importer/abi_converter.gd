@@ -7,7 +7,6 @@ class_name AbiConverter
 #"function decimals() view returns (uint8)",
 #"function totalSupply() view returns (uint256)",
 
-
 const HEADER_TEMPLATE = """extends Node
 class_name {class_name}Contract
 var contract: JavaScriptObject
@@ -42,9 +41,9 @@ static func convert_abi_to_gdscript(contract_name: String, address: String, abi:
 		var return_type = "Variant"
 		var custom_converter = ""
 		
+		# generates outputs
 		if item.outputs.size() == 1:
 			return_type = _map_output_type(item.outputs[0].type)
-			print(return_type)
 			# will create custom conerter for outer custom types
 			if return_type == "BigNum": 
 				custom_converter = "\n\tlogs = BigNum.new(logs)"
@@ -90,8 +89,10 @@ static func _map_output_type(type: String) -> String:
 			return "String"
 		"uint256", "uint8":
 			return "BigNum"
-		"address[]", "uint256[]":
-			return "Array"
+		"address[]":
+			return "Array[String]"
+		"uint256[]":# create a output map to convert all outputs to bignum
+			return "Array[Bignum]"
 		_:
 			return "Variant"
 

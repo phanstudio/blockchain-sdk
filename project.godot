@@ -30,14 +30,20 @@ version_control/plugin_name="blockchainsdk"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/abi_importer/plugin.cfg", "res://addons/blockchain_sdk/plugin.cfg")
+enabled=PackedStringArray("res://addons/abi_importer/plugin.cfg", "res://addons/blockchain_sdk/plugin.cfg", "res://addons/wallet_interface/plugin.cfg")
 
 [file_customization]
 
 folder_colors={
 "res://addons/abi_importer/": "red",
-"res://addons/blockchain_sdk/": "gray"
+"res://addons/blockchain_sdk/": "gray",
+"res://addons/wallet_interface/": "teal"
 }
+
+[global_group]
+
+web3dependants=""
+connect_node=""
 
 [rendering]
 

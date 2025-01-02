@@ -3,7 +3,8 @@ extends PanelContainer
 @onready var amount_label: Label = $Body/AmountLabel
 @onready var address_label: Label = $Body/AddressContainer/HBoxContainer/AddressLabel
 @onready var wallet_manager: Wallet = Web3Global.wallet_manager
-#signal onclick()
+
+# get copy icon and close icon
 
 var amount: float = 0.0:
 	set(new_value):
