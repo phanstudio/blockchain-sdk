@@ -21,6 +21,8 @@ The SDK consists of several key components:
 3. `ContractManager`: Handles smart contract interactions
 4. `Web3Global`: Global access point for blockchain functionality
 
+# fix double function problem; check for the function duplicate and add a number to it
+
 
 ## Support
 
