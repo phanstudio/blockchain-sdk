@@ -88,7 +88,7 @@ func _update_wallet_ui(connected: bool) -> void:
 	address = wallet.wallet_address if connected else "0x0000000000000"
 	updategroup(mainconnectbutton, "address", address)
 	connected_section.address = address
-	wallet.get_balance()
+	if wallet.wallet_balance != 0: _update_balance(str(wallet.wallet_balance))
 
 func open_connect_section() -> void:
 	close_connect_section()
