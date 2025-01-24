@@ -10,7 +10,16 @@ extends Control
 @onready var wallet = Web3Global.wallet_manager
 @onready var close_section: Panel = $close_section
 
-@export var mainconnectbutton: Array[Control]
+@export var mainconnectbutton: Array[Control]:
+	set(new_value):
+		#print(new_value)
+		$mainconnectbutton.show()
+		if new_value.size() != 0:
+			if new_value[0] != $mainconnectbutton:
+				$mainconnectbutton.hide()
+		mainconnectbutton = new_value
+	get:
+		return mainconnectbutton
 
 var amount = 0
 var address = ""
@@ -79,6 +88,7 @@ func _update_wallet_ui(connected: bool) -> void:
 	address = wallet.wallet_address if connected else "0x0000000000000"
 	updategroup(mainconnectbutton, "address", address)
 	connected_section.address = address
+	wallet.get_balance()
 
 func open_connect_section() -> void:
 	close_connect_section()

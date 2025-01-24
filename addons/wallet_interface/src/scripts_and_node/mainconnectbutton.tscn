@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://db4wvgualh8ts"]
 
-[ext_resource type="Script" path="res://addons/wallet_interface/src/mainconnectbutton.gd" id="1_0fbgc"]
+[ext_resource type="Script" path="res://addons/wallet_interface/src/scripts_and_node/mainconnectbutton.gd" id="1_0fbgc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnbxb"]
 content_margin_left = 5.0

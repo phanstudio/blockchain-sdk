@@ -42,10 +42,10 @@ var connected: bool = false:
 func _ready() -> void:
 	var group_nodes: Array[Node] = get_tree().get_nodes_in_group("web3dependants")
 	connect_nodes = get_tree().get_nodes_in_group("connect_node")
-	connect_nodes.append($Connect)
+	#connect_nodes.append($Connect)
 	if not use_internal:
 		if group_nodes.size() > 0: # reset if nothing in
-			connected_node = group_nodes
+			connected_node.append_array(group_nodes)
 	connected = wallet_manager.is_wallet_connected
 
 func updategroup(_array:Array, _property: String, _value: Variant):
