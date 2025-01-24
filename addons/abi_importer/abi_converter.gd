@@ -11,8 +11,9 @@ const HEADER_TEMPLATE = """extends Node
 class_name {class_name}Contract
 var contract: JavaScriptObject
 var contract_manager: ContractManager = Web3Global.contract_manager
-func _init() -> void:
-	var address = '{address}'
+func _init(address: String= null) -> void:
+	if not address: # for custom abi support
+		address = '{address}'
 	var abi = {abi}
 	contract = contract_manager.smartcontract(address, abi)
 """

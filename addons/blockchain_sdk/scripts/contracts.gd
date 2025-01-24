@@ -56,6 +56,7 @@ func smartcontract(contract_address, contract_abi):
 	return contract
 
 ## The run methods
+## changed
 func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
 	if not processing:
 		processing = true
@@ -91,7 +92,6 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 			jsreturnvalue = null
 		else:
 			runlogs = create_jsobj(error)
-			processing = false
 		console.log(runlogs) # catch the error
 		if not runlogs.willFail: # add return values for success
 			await run(contractmethod, args, _method)
@@ -99,6 +99,7 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 				# add a delay before this
 				return output_logs["output"]
 			return ERROR
+		processing = false
 		updateoutput(runlogs.error)
 		return ERROR
 	updateoutput("still processing a transaction")
