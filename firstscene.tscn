@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7uqdpyxfg5ha"]
 
 [ext_resource type="Script" path="res://firstscene.gd" id="1_tu30x"]
-[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/wallet_interface.tscn" id="2_3qj7v"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/main/wallet_interface.tscn" id="2_3qj7v"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_tu30x")

@@ -1,8 +1,8 @@
 [gd_scene load_steps=15 format=3 uid="uid://cwxawj42dlkhr"]
 
-[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://addons/wallet_interface/src/connectbutton.tscn" id="1_1ddmr"]
+[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://addons/wallet_interface/src/main/connectbutton.tscn" id="1_1ddmr"]
 [ext_resource type="Texture2D" uid="uid://bji4qje8aj8w6" path="res://assets/icons/Sei_Symbol_Gradient.svg" id="1_e5uy7"]
-[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/wallet_interface.tscn" id="2_2yyan"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/main/wallet_interface.tscn" id="2_2yyan"]
 [ext_resource type="Texture2D" uid="uid://dwvivy3gkdgp8" path="res://assets/icons/dashboard.svg" id="2_ehli2"]
 [ext_resource type="Texture2D" uid="uid://b25for376gbxu" path="res://assets/icons/sync.png" id="3_8ut0k"]
 [ext_resource type="Texture2D" uid="uid://b4jft51deluw8" path="res://assets/icons/database.png" id="3_bih6q"]
@@ -398,13 +398,6 @@ use_internal = false
 
 [node name="wallet_Interface" parent="." node_paths=PackedStringArray("mainconnectbutton") instance=ExtResource("2_2yyan")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
 mainconnectbutton = [NodePath("../Main/Body/margin/mainbody/Overview/row/CardBody2/connectbutton"), NodePath("../Main/Body/Appbar/Header/Row/connectbutton")]
 
 [connection signal="pressed" from="Main/Body/margin/mainbody/Overview/row/checkseiaddress/row/prefill" to="Main/Body/margin/mainbody/Overview/row/checkseiaddress" method="prefil_text"]
