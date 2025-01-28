@@ -1,6 +1,4 @@
-@tool
 extends Node
-
 class_name JsWeb3Node
 
 var window
@@ -189,26 +187,6 @@ func wait_till(promise, waittime= 0.05): # add time limit to this
 		await get_tree().create_timer(waittime).timeout
 		if state in ["fulfilled", "rejected"]:
 			break
-
-# improved version
-#func wait_till(promise, waittime=0.05, time_limit=5.0): # Default time limit is 5 seconds
-	#var elapsed_time = 0.0
-	#var state = "None"
-	#
-	#while true:
-		#state = await PromiseState(promise)
-		#if state in ["fulfilled", "rejected"]:
-			#break
-		#
-		#await get_tree().create_timer(waittime).timeout
-		#elapsed_time += waittime
-		#
-		## Check if the elapsed time exceeds the time limit
-		#if elapsed_time >= time_limit:
-			#state = "timeout"
-			#break
-	#
-	#return state
 
 # use to retrive the logs
 # resets logs when used

@@ -91,7 +91,7 @@ func get_balance() -> void:
 		on_reject,
 		true
 	)
-	connect_sequence.runasynic(
+	balance_sequence.runasynic(
 		window.ethereum.request(
 			create_jsobj({ 
 				"method": 'eth_getBalance',
@@ -109,7 +109,7 @@ func switch_network(chain_name: String) -> void:
 	var switch_sequence = Sequence.new(
 		func(_args):prints("switched: ", chain_name), on_reject, true
 	)
-	connect_sequence.runasynic(
+	switch_sequence.runasynic(
 		window.ethereum.request(
 			create_jsobj({ 
 				"method": 'wallet_switchEthereumChain',

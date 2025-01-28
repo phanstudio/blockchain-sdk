@@ -1,6 +1,0 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://d11pno2n63ten"]
-
-[ext_resource type="FontFile" uid="uid://2o3lhxapgs74" path="res://addons/blockchain_sdk/assets/resources/Agdasima-Bold.ttf" id="1_qt7mi"]
-
-[resource]
-base_font = ExtResource("1_qt7mi")

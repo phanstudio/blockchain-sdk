@@ -3,7 +3,7 @@ class_name ContractManager
 
 signal contract_query_result(result)
 signal contract_execution_result(result)
-signal contract_result # how to check for multiple contracts beieng ran can multiple contracts be ran
+signal contract_result # how to check for multiple contracts being ran can multiple contracts be ran
 
 var checklogs
 var jsreturnvalue
@@ -11,18 +11,14 @@ var jsreturnvalue
 var query_contract = JavaScriptBridge.create_callback(_query_contract)
 var execute_contract = JavaScriptBridge.create_callback(_execute_contract)
 var wait = JavaScriptBridge.create_callback(_wait)
-var sign_returned = JavaScriptBridge.create_callback(_sign_returned)
-var sign_error = JavaScriptBridge.create_callback(_sign_error)
 const ERROR = "error;"
 const OKS = "ok;"
 var wait_check = false
 var processing = false
-
 var output_logs = {
 	"error": null,
 	"output": null
 }
-
 var safeerror = JavaScriptBridge.create_callback(
 	func(args):
 		var response = args[0] if args.size() > 0 else null
@@ -57,7 +53,6 @@ func smartcontract(contract_address, contract_abi):
 	return contract
 
 ## The run methods
-## changed
 func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
 	if not processing:
 		processing = true
@@ -106,6 +101,59 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 	updateoutput("still processing a transaction")
 	return ERROR
 
+## add to query contracts add an option for fast/done estimate gas
+## when running in fast mode errors might not be caught
+func querysafely(contractmethod, args1:Array=[], _fast= false): 
+	var _method = "query"
+	var runlogs
+	var args:String = arr_to_str(args1)
+	window.contractmethod = contractmethod.estimateGas
+	var error = handelDefualtErrors(args)
+	if not _fast:
+		if not error:
+			var javascript_code = """
+				async function checkWillFailAsync() {
+					try {
+						const gasEstimate = await window.contractmethod(%s);
+						return {
+							willFail: false,
+							error: null,
+							gasEstimate: gasEstimate.toString()
+						};
+					} catch (error) {
+						return {
+							willFail: true,
+							error: error.message,
+							gasEstimate: null
+						};
+					}
+				}
+			window.result = checkWillFailAsync
+			"""%[args]
+			JavaScriptBridge.eval(javascript_code);
+			await wait_till(window.result().then(jsreturn))
+			delete_globals("contractmethod")
+			delete_globals("result")
+			runlogs = jsreturnvalue
+			jsreturnvalue = null
+		else:
+			runlogs = create_jsobj(error)
+	else:
+		runlogs = create_jsobj({
+			"willFail": false,
+			"gasEstimate": null,
+			"error": null,
+		})
+	console.log(runlogs) # catch the error
+	if not runlogs.willFail: # add return values for success
+		await run(contractmethod, args, _method)
+		if output_logs["error"] == null:
+			return output_logs["output"]
+		return ERROR
+	updateoutput(runlogs.error)
+	return ERROR
+
+## make run independent from run safely # away to support asynic get functions
 func run(_method, args: String, _type: String= "query"): # add contract executed
 	window.contractmethod = _method
 	var javascript_code = """
@@ -241,7 +289,6 @@ func _query_contract(args):
 	updateoutput(null, response)
 	processing = false
 
-
 ## set/write contract (response)
 func _execute_contract(args): #imporve wait to finsh completly
 	var response = args[0] if args.size() > 0 else null
@@ -287,15 +334,16 @@ func createAbiFromFragment(fragment):
 	return "event %s(%s)"%[fragment.name, inputs];
 
 ### Signing:
-# still in works
+## still in working progress
 func sign_pressed():
 	signer = window.signer
 	var msg = "hello world"
-	signer.signMessage(msg).then(sign_returned).catch(sign_error)
+	var sign_sequence = Sequence.new(_sign_returned, _sign_error, true)
+	sign_sequence.runasynic(signer.signMessage(msg))
 
 func _sign_returned(p):
-	window.console.log(p[0])
-	print(p[0])
+	window.console.log(p)
+	print(p)
 
 func _sign_error(p):
-	window.console.log(p[0])
+	window.console.log(p)
