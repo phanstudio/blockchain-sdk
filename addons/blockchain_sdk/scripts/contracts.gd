@@ -3,6 +3,7 @@ class_name ContractManager
 
 signal contract_query_result(result)
 signal contract_execution_result(result)
+signal contract_result # how to check for multiple contracts beieng ran can multiple contracts be ran
 
 var checklogs
 var jsreturnvalue
