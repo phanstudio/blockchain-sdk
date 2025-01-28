@@ -9,10 +9,10 @@ signal balance_updated(balance: String)
 
 var wallet_address: String = ""
 var is_wallet_connected: bool = false
-var accounts = []
-var wallet_balance = 0
+var accounts:= []
+var wallet_balance:= 0
 
-const SUPPORTED_CHAINS = {
+const SUPPORTED_CHAINS:= {
 	"ethereum": "0x1",  # Ethereum Mainnet
 	"polygon": "0x89",  # Polygon Mainnet
 	"Sei": "0x531", # Sei Mainnet
@@ -20,26 +20,18 @@ const SUPPORTED_CHAINS = {
 	"Sei-testnet": "0x530" # if you have it in your wallet
 }
 
-var signer_initialized = JavaScriptBridge.create_callback(_signer_initialized)
-var _connects = JavaScriptBridge.create_callback(_connect)
-var on_reconnect = JavaScriptBridge.create_callback(_on_reconnect)
-
-var on_reject = JavaScriptBridge.create_callback(
-	func(args):
-		var response = args[0] if args.size() > 0 else null
-		is_wallet_connected = false
-)
-var _updatebalance = JavaScriptBridge.create_callback(
-	func(args):
-		var response = args[0] if args.size() > 0 else null
-		var balance = divide_by_pow10(hex_to_decimal_str(response)).pad_decimals(4)
-		wallet_balance = balance.to_float()
-		emit_signal("balance_updated", balance)
-)
+var connect_sequence: Sequence
 
 ### Wallet: Interacting with the wallet (connect,disconnect,getbalance,switchnetwork,initialize the signer)
 func _ready():
 	super._ready()
+
+## disconnect from the account (Operation)
+func disconnect_wallet() -> void:
+	wallet_address = ""
+	is_wallet_connected = false
+	emit_signal("wallet_disconnected")
+	accounts.clear()
 
 ## Conect to the account (Operation)
 func connect_wallet() -> void:
@@ -53,63 +45,23 @@ func connect_wallet() -> void:
 	reconnect()
 
 func reconnect():
-	await wait_till(window.ethereum.request(
-		create_jsobj({
-			"method": "wallet_requestPermissions",
-			"params": [{"eth_accounts": {}}]
-		})
-	).then(on_reconnect).catch(on_reject))
+	connect_sequence = Sequence.new(_on_reconnect, on_reject)
+	connect_sequence.runasynic(
+		window.ethereum.request(
+			create_jsobj({
+				"method": "wallet_requestPermissions",
+				"params": [{"eth_accounts": {}}]
+			})
+		)
+	)
 
-func _on_reconnect(args):
-	var response = args[0] if args.size() > 0 else null
-	is_wallet_connected = false
-	await wait_till(window.ethereum.request(
-		create_jsobj({
-			"method": "eth_requestAccounts"
-		})
-	).then(_connects).catch(on_reject))
-	if is_wallet_connected:
-		switch_network("Sei-devnet")
-		await wait_till(provider.getSigner().then(signer_initialized))
-
-func _connect(args):
-	var response = args[0] if args.size() > 0 else null
-	set_accounts(response)
-
-## disconnect from the account (Operation)
-func disconnect_wallet() -> void:
-	wallet_address = ""
-	is_wallet_connected = false
-	emit_signal("wallet_disconnected")
-	accounts.clear()
-
-## Switch network (eg. sei mainnet to devnet or eth mainnet) (Operation)
-func switch_network(chain_name: String) -> void:
-	if not SUPPORTED_CHAINS.has(chain_name):
-		emit_signal("connection_failed", "Unsupported chain")
-		return
-	var chain_id = SUPPORTED_CHAINS[chain_name]
-	await wait_till(window.ethereum.request(
-		create_jsobj({ 
-			"method": 'wallet_switchEthereumChain',
-			"params": [{"chainId": chain_id}]
-		})
-	))
-	print("switched: ", chain_name)
-
-## Get current wallet balance (Operation)
-func get_balance() -> void:
-	if not is_wallet_connected:
-		emit_signal("connection_failed", "Wallet not connected") # doesn't exist fix
-		return
-	#let balance = await provider.getBalance(wallet);
-	#balance = ethers.utils.formatEther(balance);
-	await wait_till(window.ethereum.request(
-		create_jsobj({ 
-			"method": 'eth_getBalance',
-			"params": [wallet_address, "latest"]
-		})
-	).then(_updatebalance))
+func _on_reconnect(response):
+	connect_sequence.update(set_accounts)
+	connect_sequence.runasynic(
+		window.ethereum.request(
+			create_jsobj({"method": "eth_requestAccounts"})
+		)
+	)
 
 ## Setter function (acounts)
 func set_accounts(response_array):
@@ -122,9 +74,54 @@ func set_accounts(response_array):
 		emit_signal("wallet_connected", accounts[0])
 		print(accounts)
 		get_balance()
+		switch_network("Sei-devnet")
+		connect_sequence.update(initialize_signer)
+		connect_sequence.runasynic(provider.getSigner())
+
+## Get current wallet balance (Operation)
+func get_balance() -> void:
+	if not is_wallet_connected:
+		emit_signal("connection_failed", "Wallet not connected") # doesn't exist fix
+		return
+	var balance_sequence = Sequence.new(
+		func(response):
+		var balance = divide_by_pow10(hex_to_decimal_str(response)).pad_decimals(4)
+		wallet_balance = balance.to_float()
+		emit_signal("balance_updated", balance), 
+		on_reject,
+		true
+	)
+	connect_sequence.runasynic(
+		window.ethereum.request(
+			create_jsobj({ 
+				"method": 'eth_getBalance',
+				"params": [wallet_address, "latest"]
+			})
+		)
+	)
+
+## Switch network (eg. sei mainnet to devnet or eth mainnet) (Operation)
+func switch_network(chain_name: String) -> void:
+	if not SUPPORTED_CHAINS.has(chain_name):
+		emit_signal("connection_failed", "Unsupported chain")
+		return
+	var chain_id = SUPPORTED_CHAINS[chain_name]
+	var switch_sequence = Sequence.new(
+		func(_args):prints("switched: ", chain_name), on_reject, true
+	)
+	connect_sequence.runasynic(
+		window.ethereum.request(
+			create_jsobj({ 
+				"method": 'wallet_switchEthereumChain',
+				"params": [{"chainId": chain_id}]
+			})
+		)
+	)
 
 ## Intialiaze signer
-func _signer_initialized(args):
-	var response = args[0] if args.size() > 0 else null
-	signer = response
-	window.signer = signer
+func initialize_signer(response):
+	window.signer = response
+
+func on_reject():
+	is_wallet_connected = false
+	#disconnect_wallet()
