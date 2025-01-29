@@ -120,7 +120,7 @@ func switch_network(chain_name: String) -> void:
 
 ## Intialiaze signer
 func initialize_signer(response):
-	window.signer = response
+	window.signer = response # check if this is safe
 
 func on_reject():
 	is_wallet_connected = false

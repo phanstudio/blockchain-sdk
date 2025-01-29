@@ -1,9 +1,12 @@
 extends Node
 class_name PrecompliedAddressContract
+
 var contract: JavaScriptObject
 var contract_manager: ContractManager = Web3Global.contract_manager
-func _init() -> void:
-	var address = '0x0000000000000000000000000000000000001004'
+
+func _init(address: String = "") -> void:
+	if not address: # for custom abi support
+		address = '0x0000000000000000000000000000000000001004'
 	var abi = [
 	{
 		"inputs": [
@@ -109,10 +112,11 @@ func _init() -> void:
 	]
 	contract = contract_manager.smartcontract(address, abi)
 
-func getEvmAddr(addr: String) -> String:
-	var logs = await contract_manager.runsafely(
+func getEvmAddr(addr: String, fast: bool= false) -> String:
+	var logs = await contract_manager.querysafely(
 		contract.getEvmAddr,
 		[addr],
+		fast
 	)
 	assert(
 		str(logs) != contract_manager.ERROR and logs != null, 
@@ -121,10 +125,11 @@ func getEvmAddr(addr: String) -> String:
 	);
 	return logs
 
-func getSeiAddr(addr: String) -> String:
-	var logs = await contract_manager.runsafely(
+func getSeiAddr(addr: String, fast: bool= false) -> String:
+	var logs = await contract_manager.querysafely(
 		contract.getSeiAddr,
 		[addr],
+		fast
 	)
 	assert(
 		str(logs) != contract_manager.ERROR and logs != null, 
@@ -133,10 +138,10 @@ func getSeiAddr(addr: String) -> String:
 	);
 	return logs
 
-func associate(v: String, r: String, s: String, customMessage: String, value: Dictionary) -> void:
+func associate(v: String, r: String, s: String, customMessage: String) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.associate,
-		[v, r, s, customMessage, value],
+		[v, r, s, customMessage],
 		"execute"
 	)
 	assert(
@@ -145,10 +150,10 @@ func associate(v: String, r: String, s: String, customMessage: String, value: Di
 		[contract_manager.output_logs["error"]]
 	);
 
-func associatePubKey(pubKeyHex: String, value: Dictionary) -> void:
+func associatePubKey(pubKeyHex: String) -> void:
 	var logs = await contract_manager.runsafely(
 		contract.associatePubKey,
-		[pubKeyHex, value],
+		[pubKeyHex],
 		"execute"
 	)
 	assert(
