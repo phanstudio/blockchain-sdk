@@ -225,3 +225,6 @@ static func _subtract_strings(str1: String, str2: String) -> String:
 		result = result.substr(1)
 	
 	return result
+
+func _to_string() -> String:
+	return "BigNum: "+ value
