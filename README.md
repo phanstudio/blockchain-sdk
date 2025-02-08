@@ -1,6 +1,5 @@
 # BlockchainSDK for Godot
 
-
 The BlockchainSDK is a powerful toolkit for integrating blockchain functionality into your Godot projects. It provides a seamless interface for connecting wallets, managing accounts, interacting with smart contracts, and building decentralized applications (dApps) within the Godot game engine.
 
 ## Features
