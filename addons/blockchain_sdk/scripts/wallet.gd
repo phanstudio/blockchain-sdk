@@ -22,7 +22,7 @@ const SUPPORTED_CHAINS:= {
 
 var connect_sequence: Sequence
 
-### Wallet: Interacting with the wallet (connect,disconnect,getbalance,switchnetwork,initialize the signer)
+## Wallet: Interacting with the wallet (connect,disconnect,getbalance,switchnetwork,initialize the signer)
 func _ready():
 	super._ready()
 

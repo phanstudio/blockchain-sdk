@@ -12,7 +12,24 @@ func _init(address{optional}) -> void:{address}
 	contract = contract_manager.smartcontract(address, abi)
 """
 
-static func convert_abi_to_gdscript(contract_name: String, abi: Variant, address:String= "") -> String:
+const banned_names: Array = [
+  "while", "break", "continue", "pass", "name",
+  "class", "class_name", "extends", "as", "self", "tool", "signal", "func",
+  "static", "const", "enum", "var", "onready", "export", "setget", "breakpoint",
+  "preload", "yield", "assert", "void", "in", "not", "and", "or", "true",
+  "false", "null", "int", "float", "bool", "String", "Vector2", "Rect2",
+  "Transform2D", "Vector3", "Rect3", "Transform", "Color", "Plane", "Quat",
+  "AABB", "Basis", "NodePath", "RID", "Object", "Dictionary", "Array",
+  "PoolByteArray", "PoolIntArray", "PoolRealArray", "PoolStringArray",
+  "PoolVector2Array", "PoolVector3Array", "PoolColorArray", "master",
+  "puppet", "remotesync", "mastersync", "puppetsync", "sync", "rpc", "remote",
+  "masterfunc", "puppetfunc", "remotesyncfunc", "mastersyncfunc", "puppetsyncfunc",
+  "syncfunc", "rpcfunc", "PI", "TAU", "INF", "NAN", "print", "print_debug",
+  "print_stack", "push_error", "push_warning", "instance_from_id", "str", "range",
+  "load", "inst2dict", "dict2inst", "len", "is_instance_valid", "owner"
+]
+
+static func convert_abi_to_gdscript(contract_name: String, abi: Variant, address: String = "") -> String:
 	var processed_abi = _preprocess_abi(abi)
 	var abi_string = JSON.stringify(processed_abi, "\t")
 	var output = ""
@@ -27,29 +44,52 @@ static func convert_abi_to_gdscript(contract_name: String, abi: Variant, address
 		"class_name": contract_name.capitalize().replace(" ", ""),
 		"address": formated_address,
 		"abi": abi_string.left(abi_string.length() - 1) + "\t]",
-		"optional": ": String"+(' = ""' if address else formated_address),
+		"optional": ": String" + (' = ""' if address else ""),
 	})
+	
+	var function_names = {}  # Track function names to handle duplicates after renaming
 	
 	for item in processed_abi:
 		if item.type != "function":
 			continue
 			
-		var func_name = item.name
+		var original_func_name = item.name
+		var modified_func_name = _rename_banned_names(original_func_name)
+		
+		# Handle duplicate function names after renaming
+		if modified_func_name in function_names:
+			function_names[modified_func_name] += 1
+			modified_func_name = "%s%d" % [modified_func_name, function_names[modified_func_name]]
+		else:
+			function_names[modified_func_name] = 1
+		
+		var func_name = modified_func_name
 		var inputs = []
 		var input_args = []
+		var used_param_names = {}  # Track parameter names within this function
 		
 		for input in item.get("inputs", []):
+			var original_name = input.get("name", "arg")
+			var modified_name = _rename_banned_names(original_name, "_")
+			
+			# Handle duplicate parameter names within the same function after renaming
+			var base_name = modified_name
+			if base_name in used_param_names:
+				used_param_names[base_name] += 1
+				modified_name = "%s%d" % [base_name, used_param_names[base_name]]
+			else:
+				used_param_names[base_name] = 1
+			
 			var gdtype = _map_input_type(input.type)
-			inputs.append("%s: %s" % [input.get("name", "arg"), gdtype])
-			input_args.append(input.get("name", "arg"))
+			inputs.append("%s: %s" % [modified_name, gdtype])
+			input_args.append(modified_name)
 		
 		var return_type = "Variant"
 		var custom_converter = ""
 		
-		# generates outputs
+		# Generate outputs
 		if item.outputs.size() == 1:
 			return_type = _map_output_type(item.outputs[0].type)
-			# will create custom converter for outer custom types
 			if return_type == "BigNum": 
 				custom_converter = "\n\tlogs = BigNum.new(logs)"
 		elif item.outputs.size() > 1:
@@ -75,12 +115,19 @@ static func convert_abi_to_gdscript(contract_name: String, abi: Variant, address
 		output += _generate_function_template(
 			func_name, inputs, input_args, return_type,
 			default_return, contract_type, custom_converter,
-			default_call, fast_run
+			default_call, fast_run, original_func_name
 		)
 	
 	return output
 
-# New function to preprocess simplified ABI format
+# Helper function to rename banned names
+static func _rename_banned_names(name: String, prefix:="__") -> String:
+	if name in banned_names:
+		return prefix+"%s" % name
+	return name
+
+# break point
+## New function to preprocess simplified ABI format
 static func _preprocess_abi(abi: Variant) -> Array:
 	var processed_abi = []
 	
@@ -157,12 +204,15 @@ static func _map_output_type(type: String) -> String:
 	match type:
 		"address", "string", "bytes32":
 			return "String"
-		"uint256", "uint8":
+		"uint256", "uint8": # add support for all the uint
 			return "BigNum"
+		# "uint8" should be a regular int
 		"address[]":
 			return "Array[String]"
 		"uint256[]":# create a output map to convert all outputs to bignum
 			return "Array[Bignum]"
+		"bool":
+			return "bool"
 		_:
 			return "Variant"
 
@@ -188,16 +238,19 @@ static func _generate_function_template(
 	func_name: String, inputs: Array, input_args: Array,
 	return_type: String, default_return: String,
 	contract_type: String, custom_converter: String,
-	default_call: String, fast_run: String,
+	default_call: String, fast_run: String, original_func_name: String
 ) -> String:
 	var args = "\n\t\t[]"
 	if not input_args.is_empty():
 		args = "\n\t\t[" + ", ".join(input_args) + "]"
+	else:
+		fast_run = fast_run.replace(", ", "")
 	var fast_default = "\n\t\tfast" if not contract_type else ""
+	
 	var function_template =  """
 func {func_name}({params}{fast_run}) -> {return_type}:
 	var logs = await contract_manager.{default_call}(
-		contract.{func_name},{args},{contract_type}{fast_default}
+		contract.{original_func_name},{args},{contract_type}{fast_default}
 	)
 	assert(
 		str(logs) != contract_manager.ERROR and logs != null, 
@@ -217,6 +270,7 @@ func {func_name}({params}{fast_run}) -> {return_type}:
 		"default_call": default_call,
 		"fast_run": fast_run,
 		"fast_default": fast_default,
+		"original_func_name": original_func_name,
 	})
 	return function_template
 

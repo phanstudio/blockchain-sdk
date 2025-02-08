@@ -52,16 +52,8 @@ func smartcontract(contract_address, contract_abi):
 	delete_globals("contract")
 	return contract
 
-## The run methods
-func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
-	if not processing:
-		processing = true
-		var runlogs
-		var args:String = arr_to_str(args1)
-		window.contractmethod = contractmethod.estimateGas
-		var error = handelDefualtErrors(args)
-		if not error:
-			var javascript_code = """
+func estimate_gas(args):
+	var javascript_code = """
 				async function checkWillFailAsync() {
 					try {
 						const gasEstimate = await window.contractmethod(%s);
@@ -80,15 +72,51 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 				}
 			window.result = checkWillFailAsync
 			"""%[args]
-			JavaScriptBridge.eval(javascript_code);
-			await wait_till(window.result().then(jsreturn))
-			delete_globals("contractmethod")
-			delete_globals("result")
-			runlogs = jsreturnvalue
-			jsreturnvalue = null
+	JavaScriptBridge.eval(javascript_code);
+	await wait_till(window.result().then(jsreturn))
+	delete_globals("contractmethod")
+	delete_globals("result")
+	var runlogs = jsreturnvalue
+	jsreturnvalue = null
+	return runlogs
+
+## The run methods
+func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execute or query
+	if not processing:
+		processing = true
+		var runlogs
+		var args:String = arr_to_str(args1)
+		window.contractmethod = contractmethod.estimateGas
+		var error = handelDefualtErrors(args)
+		if not error:
+			#var javascript_code = """
+				#async function checkWillFailAsync() {
+					#try {
+						#const gasEstimate = await window.contractmethod(%s);
+						#return {
+							#willFail: false,
+							#error: null,
+							#gasEstimate: gasEstimate.toString()
+						#};
+					#} catch (error) {
+						#return {
+							#willFail: true,
+							#error: error.message,
+							#gasEstimate: null
+						#};
+					#}
+				#}
+			#window.result = checkWillFailAsync
+			#"""%[args]
+			#JavaScriptBridge.eval(javascript_code);
+			#await wait_till(window.result().then(jsreturn))
+			#delete_globals("contractmethod")
+			#delete_globals("result")
+			#runlogs = jsreturnvalue
+			#jsreturnvalue = null
+			runlogs = await estimate_gas(args)
 		else:
 			runlogs = create_jsobj(error)
-		console.log(runlogs) # catch the error
 		if not runlogs.willFail: # add return values for success
 			await run(contractmethod, args, _method)
 			if output_logs["error"] == null:
@@ -111,31 +139,13 @@ func querysafely(contractmethod, args1:Array=[], _fast= false):
 	var error = handelDefualtErrors(args)
 	if not _fast:
 		if not error:
-			var javascript_code = """
-				async function checkWillFailAsync() {
-					try {
-						const gasEstimate = await window.contractmethod(%s);
-						return {
-							willFail: false,
-							error: null,
-							gasEstimate: gasEstimate.toString()
-						};
-					} catch (error) {
-						return {
-							willFail: true,
-							error: error.message,
-							gasEstimate: null
-						};
-					}
-				}
-			window.result = checkWillFailAsync
-			"""%[args]
-			JavaScriptBridge.eval(javascript_code);
-			await wait_till(window.result().then(jsreturn))
-			delete_globals("contractmethod")
-			delete_globals("result")
-			runlogs = jsreturnvalue
-			jsreturnvalue = null
+			runlogs = await estimate_gas(args)
+			#JavaScriptBridge.eval(javascript_code);
+			#await wait_till(window.result().then(jsreturn))
+			#delete_globals("contractmethod")
+			#delete_globals("result")
+			#runlogs = jsreturnvalue
+			#jsreturnvalue = null
 		else:
 			runlogs = create_jsobj(error)
 	else:
@@ -144,7 +154,6 @@ func querysafely(contractmethod, args1:Array=[], _fast= false):
 			"gasEstimate": null,
 			"error": null,
 		})
-	console.log(runlogs) # catch the error
 	if not runlogs.willFail: # add return values for success
 		await run(contractmethod, args, _method)
 		if output_logs["error"] == null:
@@ -175,6 +184,8 @@ func run(_method, args: String, _type: String= "query"): # add contract executed
 	delete_globals("contractmethod")
 	delete_globals("result")
 
+## stores a error or a return value
+## if input a string for error and a return value for output
 func updateoutput(_error=null, _output=null):
 	output_logs["error"] = _error
 	output_logs["output"] = _output
@@ -286,7 +297,13 @@ func parseBigNumToNumber(bignum: String, token_decimals: int = 18):
 ## view/read contract (response)
 func _query_contract(args):
 	var response = args[0] if args.size() > 0 else null
-	updateoutput(null, response)
+	var _error = false
+	if typeof(response) == TYPE_STRING:
+		if "execution reverted" in response:
+			updateoutput(response)
+			_error = true
+	if not _error:
+		updateoutput(null, response)
 	processing = false
 
 ## set/write contract (response)
