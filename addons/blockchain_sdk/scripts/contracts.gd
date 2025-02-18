@@ -89,31 +89,6 @@ func runsafely(contractmethod, args1:Array=[], _method:String= "query"): # execu
 		window.contractmethod = contractmethod.estimateGas
 		var error = handelDefualtErrors(args)
 		if not error:
-			#var javascript_code = """
-				#async function checkWillFailAsync() {
-					#try {
-						#const gasEstimate = await window.contractmethod(%s);
-						#return {
-							#willFail: false,
-							#error: null,
-							#gasEstimate: gasEstimate.toString()
-						#};
-					#} catch (error) {
-						#return {
-							#willFail: true,
-							#error: error.message,
-							#gasEstimate: null
-						#};
-					#}
-				#}
-			#window.result = checkWillFailAsync
-			#"""%[args]
-			#JavaScriptBridge.eval(javascript_code);
-			#await wait_till(window.result().then(jsreturn))
-			#delete_globals("contractmethod")
-			#delete_globals("result")
-			#runlogs = jsreturnvalue
-			#jsreturnvalue = null
 			runlogs = await estimate_gas(args)
 		else:
 			runlogs = create_jsobj(error)
@@ -140,12 +115,6 @@ func querysafely(contractmethod, args1:Array=[], _fast= false):
 	if not _fast:
 		if not error:
 			runlogs = await estimate_gas(args)
-			#JavaScriptBridge.eval(javascript_code);
-			#await wait_till(window.result().then(jsreturn))
-			#delete_globals("contractmethod")
-			#delete_globals("result")
-			#runlogs = jsreturnvalue
-			#jsreturnvalue = null
 		else:
 			runlogs = create_jsobj(error)
 	else:
