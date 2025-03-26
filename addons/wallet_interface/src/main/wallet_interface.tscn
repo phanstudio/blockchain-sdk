@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://stw5o24tuait"]
 
-[ext_resource type="Script" path="res://addons/wallet_interface/src/scripts_and_node/wallet_interface.gd" id="1_ojqeb"]
+[ext_resource type="Script" uid="uid://ccsw8an131c8j" path="res://addons/wallet_interface/src/scripts_and_node/wallet_interface.gd" id="1_ojqeb"]
 [ext_resource type="PackedScene" uid="uid://db4wvgualh8ts" path="res://addons/wallet_interface/src/scripts_and_node/mainconnectbutton.tscn" id="3_tt3h4"]
 [ext_resource type="Texture2D" uid="uid://df2q64dvop442" path="res://addons/wallet_interface/assets/icons/icon.svg" id="4_6homn"]
-[ext_resource type="Script" path="res://addons/wallet_interface/src/scripts_and_node/connected_section.gd" id="4_kbhq7"]
+[ext_resource type="Script" uid="uid://bbo4cbcjuild7" path="res://addons/wallet_interface/src/scripts_and_node/connected_section.gd" id="4_kbhq7"]
 [ext_resource type="Texture2D" uid="uid://c6qauk3qwiuxm" path="res://addons/wallet_interface/assets/icons/3d-print.png" id="5_vlbrm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5ppe"]

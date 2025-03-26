@@ -34,6 +34,16 @@ func disconnect_wallet() -> void:
 	accounts.clear()
 
 ## Conect to the account (Operation)
+## Do something for this plugin. Before using the method
+## you first have to [method initialize] [MyPlugin].[br]
+## [color=yellow]Warning:[/color] Always [method clean] after use.[br]
+## Usage:
+## [codeblock]
+## func _ready():
+##     the_plugin.initialize()
+##     the_plugin.do_something()
+##     the_plugin.clean()
+## [/codeblock]
 func connect_wallet() -> void:
 	if is_wallet_connected:
 		print("Already connecting to wallet. Please wait.")

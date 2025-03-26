@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://km7xf73p1qd7"]
 
-[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://addons/wallet_interface/src/connectbutton.tscn" id="1_lmyvp"]
-[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/wallet_interface.tscn" id="2_yg4hg"]
+[ext_resource type="PackedScene" uid="uid://duu2qyxdj5lp1" path="res://addons/wallet_interface/src/main/connectbutton.tscn" id="1_lmyvp"]
+[ext_resource type="PackedScene" uid="uid://stw5o24tuait" path="res://addons/wallet_interface/src/main/wallet_interface.tscn" id="2_yg4hg"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bo2j0xtk5o883" path="res://assets/icons/send.png" id="4_a7fwr"]
 [ext_resource type="Texture2D" uid="uid://4w6ll0nqjp1h" path="res://assets/icons/deployed_code_history.png" id="4_gl0ly"]
 [ext_resource type="Texture2D" uid="uid://cj2ix8l2ywjfr" path="res://assets/icons/profit.png" id="9_ithl0"]
-[ext_resource type="Script" path="res://checkseiaddress.gd" id="10_yindx"]
+[ext_resource type="Script" uid="uid://ciavj1mrdbe46" path="res://checkseiaddress.gd" id="10_yindx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y3um"]
 content_margin_left = 5.0

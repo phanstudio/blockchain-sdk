@@ -7,7 +7,7 @@ extends Control
 
 @onready var connected_section = $ConnectedSection
 @onready var connect_wallet: PanelContainer = $connect_wallet
-@onready var wallet = Web3Global.wallet_manager
+@onready var wallet: Wallet = Web3Global.wallet_manager
 @onready var close_section: Panel = $close_section
 
 @export var mainconnectbutton: Array[Control]:
