@@ -25,9 +25,7 @@ The SDK consists of several key components:
 
 This project is proudly supported by:
 
-[![Sei Logo](https://uploads-ssl.webflow.com/64f85a6481da0c1c2aa3f7f4/6525e58a4be5f97cd7384ff7_sei_logo.svg)](https://gap.karmahq.xyz/community/sei)
-
-**[Sei](https://sei.io)** via [Karma GAP](https://gap.karmahq.xyz/community/sei)  
+- **[Sei](https://sei.io)** via [Karma GAP](https://gap.karmahq.xyz/community/sei)
 Special thanks for their support and commitment to open-source innovation.
 
 
