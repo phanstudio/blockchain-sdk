@@ -21,9 +21,18 @@ The SDK consists of several key components:
 3. `ContractManager`: Handles smart contract interactions
 4. `Web3Global`: Global access point for blockchain functionality
 
+## 🚀 Sponsors
+
+This project is proudly supported by:
+
+[![Sei Logo](https://uploads-ssl.webflow.com/64f85a6481da0c1c2aa3f7f4/6525e58a4be5f97cd7384ff7_sei_logo.svg)](https://gap.karmahq.xyz/community/sei)
+
+**[Sei](https://sei.io)** via [Karma GAP](https://gap.karmahq.xyz/community/sei)  
+Special thanks for their support and commitment to open-source innovation.
+
 
 ## Support
 
-For questions, issues, or feature requests, please open an issue on the GitHub repository or contact our support team at [your support email/channel].
+For questions, issues, or feature requests, please open an issue on the GitHub repository or contact our support team at [twitter](https://x.com/devphan_).
 
 ---
